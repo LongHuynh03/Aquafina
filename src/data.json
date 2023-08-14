@@ -1,40 +1,40 @@
 {
     "Gifts" :{
         "Gift_1" :{
-            "Name" : "Túi tote",
-            "Image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Tui_Tote.png?alt=media&token=c8c9ab2c-118a-4203-b9d5-96c3daef6c15",
-            "Type" : 1,
-            "Use" : 2
+            "name" : "Túi tote",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Tui_Tote.png?alt=media&token=c8c9ab2c-118a-4203-b9d5-96c3daef6c15",
+            "type" : 1,
+            "use" : 2
         },
         "Gift_2" :{
-            "Name" : "Áo thời trang",
-            "Image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Ao_thun-W.png?alt=media&token=a54a9e08-3b0c-4068-b26f-940c7fe55792",
-            "Type" : 1,
-            "Use" : 7
+            "name" : "Áo thời trang",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Ao_thun-W.png?alt=media&token=a54a9e08-3b0c-4068-b26f-940c7fe55792",
+            "type" : 1,
+            "use" : 7
         },
         "Gift_3" :{
-            "Name" : "Vớ",
-            "Image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Sock.png?alt=media&token=f8119b4e-3ce4-48f0-b67e-83e6d88a01d4",
-            "Type" : 2,
-            "Use" : 1
+            "name" : "Vớ",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Sock.png?alt=media&token=f8119b4e-3ce4-48f0-b67e-83e6d88a01d4",
+            "type" : 2,
+            "use" : 1
         },
         "Gift_4" :{
-            "Name" : "Nón lưỡi trai",
-            "Image" : "",
-            "Type" : 4,
-            "Use" : 15
+            "name" : "Nón lưỡi trai",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Non_Offwhite.png?alt=media&token=4e9d656e-ac5b-4cdd-a7b9-f1110d8b3f73",
+            "type" : 4,
+            "use" : 15
         },
         "Gift_5" :{
-            "Name" : "Áo thời trang",
-            "Image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Ao_thun-B.png?alt=media&token=947d0120-fe71-4773-9a93-f0ec43f81acc",
-            "Type" : 1,
-            "Use" : 7
+            "name" : "Áo thời trang",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Ao_thun-B.png?alt=media&token=947d0120-fe71-4773-9a93-f0ec43f81acc",
+            "type" : 1,
+            "use" : 7
         },
         "Gift_6" :{
-            "Name" : "Áo khoác cape",
-            "Image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Ao_layer.png?alt=media&token=f9359d21-e092-479d-b787-b438bab1565f",
-            "Type" : 1,
-            "Use" : 108
+            "name" : "Áo khoác cape",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Ao_layer.png?alt=media&token=f9359d21-e092-479d-b787-b438bab1565f",
+            "type" : 1,
+            "use" : 108
         }
     }
 }

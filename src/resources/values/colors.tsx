@@ -16,4 +16,9 @@ export const Colors = {
     GRAY_4: 'rgba(174, 177, 181, 1)',
     WHITE_0: 'rgba(255, 255, 255, 0)',
     WHITE_93: 'rgba(255, 255, 255, 0.93)',
+    BLUE_400: 'rgba(51, 108, 200, 1)',
+    BLUE_200:'rgba(153, 181, 227, 1)',
+    BLUE: 'rgba(0, 70, 189, 1)',
+    BG_SCREEN : 'rgba(232, 237, 242, 1)',
+    BG_CONTENT: 'rgba(240, 250, 255, 1)',
   };

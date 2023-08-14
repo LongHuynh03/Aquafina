@@ -1,9 +1,6 @@
+import 'react-native-gesture-handler'
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native'
 import React from 'react'
-import Header from './src/components/header/Header'
-import Login from './src/containers/Authen/Login'
-import Register from './src/containers/Authen/Register'
-import SendOTP from './src/containers/Authen/SendOTP'
 import RootNavigation from './src/navigaton/RootNavigation'
 
 const App = () => {
