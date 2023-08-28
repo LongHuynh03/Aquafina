@@ -1,3 +1,25 @@
 {
-  "extends": "@tsconfig/react-native/tsconfig.json"
+  "extends": "@tsconfig/react-native/tsconfig.json",
+  // "compilerOptions": {
+  //   "baseUrl": "./",
+  //   "paths": {
+  //     "@assets" : ["src/assets"],
+  //     "@presentation" : ["src/presentation"],
+  //     "@domain": ["src/domain"],
+  //     "@core": ["src/core"],
+
+  //     "@components": ["src/presentation/components"],
+  //     "@containers": ["src/presentation/container"],
+  //     "@resources": ["src/presentation/resource"],
+  //     "@shared-state": ["src/presentation/shared-state"],
+  //     "@navigation": ["src/presentation/navigation"]
+  //   },
+    
+  // },
+  // "exclude": [
+  //     "node_modules",
+  //     "babel.config.js",
+  //     "metro.config.js",
+  //     "jest.config.js"
+  //   ]
 }

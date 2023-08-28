@@ -1,11 +1,17 @@
-import 'react-native-gesture-handler'
 import { StyleSheet, Text, View, SafeAreaView } from 'react-native'
 import React from 'react'
-import RootNavigation from './src/navigaton/RootNavigation'
+import RootNavigation from './src/presentation/navigations/RootNavigation'
+import { Provider } from 'react-redux'
+import { store } from './src/presentation/shared-state'
+import MainTest from './src/test/MainTest'
 
 const App = () => {
   return (
-    <RootNavigation/>
+    <Provider store={store}>
+      <RootNavigation />
+      {/* <MainTest/> */}
+    </Provider>
+
   )
 }
 

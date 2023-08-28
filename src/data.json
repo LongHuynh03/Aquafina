@@ -1,40 +1,184 @@
 {
+    "Banners": {
+        "Banner_1" : {
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Banner_1.png?alt=media&token=f9fcedd4-ee66-4702-9fb4-246bcb2a6dc9"
+        },
+        "Banner_2" : {
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Banner_2.png?alt=media&token=7b7555fc-fa3b-41c3-98e7-d2b0f23458cf"
+        },
+        "Banner_3" : {
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Banner_3.png?alt=media&token=0ea3b25b-c889-459d-9b1b-14ef4931541b"
+        },
+        "Banner_4" : {
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Banner_4.png?alt=media&token=65357d4d-91ba-4a06-9b87-13086976d7d8"
+        }
+    },
     "Gifts" :{
         "Gift_1" :{
             "name" : "Túi tote",
-            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Tui_Tote.png?alt=media&token=c8c9ab2c-118a-4203-b9d5-96c3daef6c15",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Tui_Tote.png?alt=media&token=98489904-f764-4923-8752-8587c4417492",
             "type" : 1,
             "use" : 2
         },
         "Gift_2" :{
             "name" : "Áo thời trang",
-            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Ao_thun-W.png?alt=media&token=a54a9e08-3b0c-4068-b26f-940c7fe55792",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Ao_thun-W.png?alt=media&token=72b07526-ff6b-4ef7-87a3-5a8108917cb0",
             "type" : 1,
             "use" : 7
         },
         "Gift_3" :{
             "name" : "Vớ",
-            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Sock.png?alt=media&token=f8119b4e-3ce4-48f0-b67e-83e6d88a01d4",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Sock.png?alt=media&token=cfda8989-30f1-415d-9829-69295c3364e4",
             "type" : 2,
             "use" : 1
         },
         "Gift_4" :{
             "name" : "Nón lưỡi trai",
-            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Non_Offwhite.png?alt=media&token=4e9d656e-ac5b-4cdd-a7b9-f1110d8b3f73",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Non_Offwhite.png?alt=media&token=764eb1f9-d65c-47b2-b6b1-22041d369b79",
             "type" : 4,
             "use" : 15
         },
         "Gift_5" :{
             "name" : "Áo thời trang",
-            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Ao_thun-B.png?alt=media&token=947d0120-fe71-4773-9a93-f0ec43f81acc",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Ao_thun-B.png?alt=media&token=04f56064-727d-4ef6-a056-5ff06ee3d9eb",
             "type" : 1,
             "use" : 7
         },
         "Gift_6" :{
             "name" : "Áo khoác cape",
-            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Ao_layer.png?alt=media&token=f9359d21-e092-479d-b787-b438bab1565f",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Ao_layer.png?alt=media&token=e5322a9b-cc56-444d-92e1-2118004b855c",
             "type" : 1,
             "use" : 108
+        }
+    },
+    "Users": {
+        "User_1" : {
+            "name" : "Lê Quỳnh Ái Vân",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Avatar.png?alt=media&token=b2c92342-d91c-4825-bc49-de7c562106e6",
+            "point" : 150,
+            "rank" : 100
+        },
+        "User_2" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Avatar_1.png?alt=media&token=3cc3b955-e978-44a2-aca0-958d34681746",
+            "point" : 1000,
+            "rank" : 1
+        },
+        "User_3" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Avatar_1.png?alt=media&token=3cc3b955-e978-44a2-aca0-958d34681746",
+            "point" : 999,
+            "rank" : 2
+        },
+        "User_4" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Avatar_1.png?alt=media&token=3cc3b955-e978-44a2-aca0-958d34681746",
+            "point" : 500,
+            "rank" : 3
+        },
+        "User_5" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Avatar_2.png?alt=media&token=9b2e0d74-a09a-45b5-a673-26f5f481294c",
+            "point" : 450,
+            "rank" : 4
+        },
+        "User_6" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Avatar_3.png?alt=media&token=a1386157-ca90-4702-a191-c19c9ec41bbd",
+            "point" : 200,
+            "rank" : 5
+        },
+        "User_7" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Avatar_3.png?alt=media&token=a1386157-ca90-4702-a191-c19c9ec41bbd",
+            "point" : 200,
+            "rank" : 6
+        },
+        "User_8" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Avatar_3.png?alt=media&token=a1386157-ca90-4702-a191-c19c9ec41bbd",
+            "point" : 200,
+            "rank" : 7
+        },
+        "User_9" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Avatar_3.png?alt=media&token=a1386157-ca90-4702-a191-c19c9ec41bbd",
+            "point" : 200,
+            "rank" : 8
+        },
+        "User_10" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Avatar_3.png?alt=media&token=a1386157-ca90-4702-a191-c19c9ec41bbd",
+            "point" : 200,
+            "rank" : 9
+        },
+        "User_11" : {
+            "name" : "John Wick",
+            "phone" : "0767375921",
+            "avatar" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Avatar_3.png?alt=media&token=a1386157-ca90-4702-a191-c19c9ec41bbd",
+            "point" : 200,
+            "rank" : 10
+        }
+    },
+    "QuantityGifts" :{
+        "QuantityGift_1" : {
+            "name" : "Áo khoác cape Aquafina x Headless",
+            "quantity" : 6,
+            "method" : "Trao cho 6 người có điểm Aquaffina cao nhất",
+            "price" : "1.200.000 đồng/ áo khoác",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Item_Ao_Cape.png?alt=media&token=66280a88-bc45-428c-b562-1416b13c3ac5"
+        },
+        "QuantityGift_2" : {
+            "name" : "Túi Tote Aquafina x Headless",
+            "quantity" : 6,
+            "method" : "Trao cho 6 người có điểm Aquafina cao nhì",
+            "price" : "800.000 đồng/ túi",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Item_Tui_Tote.png?alt=media&token=8fe3d2bd-5757-4031-af37-5469b21c8e05"
+        },
+        "QuantityGift_3" : {
+            "name" : "Áo thun Aquafina x Repeet",
+            "quantity" : 100,
+            "method" : "Trao ngẫu nhiên cho 100 người trong tổng số 388 người có điểm Aquafina cao nhất còn lại",
+            "price" : "200.000 đồng/ áo",
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Item_Ao_Thun.png?alt=media&token=3e0eb495-2ac6-40cb-9d88-8013ed6f672b"
+        },
+        "QuantityGift_4" : {
+            "name" : "Nón Aquafina x Repeet",
+            "quantity" : 88,
+            "method" : "Trao ngẫu nhiên cho 88 người trong tổng số 288 người có điểm Aquafina cao nhất còn lại",
+            "price" : "200.000 đồng/ nón" ,
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Item_Non.png?alt=media&token=5a6f70cc-2496-4d4a-89fb-122b859fe306"
+        },
+        "QuantityGift_5" : {
+            "name" : "Vớ Aquafina x Repeet",
+            "quantity" : 100,
+            "method" : "Trao ngẫu nhiên cho 100 người trong tổng số 200 người có điểm Aquafina cao nhất còn lại",
+            "price" : "50.000 đồng/ đôi vớ" ,
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Item_Vo.png?alt=media&token=25f114aa-bd17-497f-a3ba-ce407b447560"
+        },
+        "QuantityGift_6" : {
+            "name" : "Túi Tote",
+            "quantity" : 80,
+            "method" : "Trao ngẫu nhiên cho 100 người trong tổng số 100 người có điểm Aquafina cao nhất còn lại",
+            "price" : "200.000 đồng/ túi" ,
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Item_Tui.png?alt=media&token=f6ddb93d-2339-4341-b682-a70a8c262b69"
+        },
+        "QuantityGift_7" : {
+            "name" : "Voucher xem phim tại rạp chiếu phim Lotte",
+            "quantity" : 100,
+            "method" : "Trao ngẫu nhiên cho 100 người trong tổng số 200 người có điểm Aquafina cao nhất còn lại",
+            "price" : "50.000 đồng/ đôi vớ" ,
+            "image" : "https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-Item_Ve.png?alt=media&token=ec74e659-4d3f-468f-8b65-f597f03f5721"
         }
     }
 }
