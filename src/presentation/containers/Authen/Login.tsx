@@ -22,6 +22,10 @@ const Login: React.FC<HomeDrawerScreenProps<'LogIn'>> = ({ route, navigation }) 
 
     const goHome = () => {
         navigation.navigate('Home')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+        });
     };
 
     useEffect(() => {

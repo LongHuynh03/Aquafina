@@ -1,4 +1,4 @@
-import { StatusBar, StyleSheet, Text, TouchableOpacity, View, ScrollView, Image, Dimensions, FlatList } from 'react-native'
+import {  StyleSheet, Text,  View,  Dimensions, } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import Header from '../../components/header/Header'
 import { Colors } from '../../resource/values/colors'
@@ -13,12 +13,14 @@ import { Chart } from '../../components'
 import Background from '../../components/background/Background'
 import { HomeDrawerScreenProps } from '../../navigations/drawer/DrawerNavigation'
 import { useSelector } from 'react-redux'
-import { RootState, getUsers, useAppDispatch } from '../../shared-state'
+import { RootState, getUsers, signOut, useAppDispatch } from '../../shared-state'
+import Dialog from '../../components/dialog/Dialog'
 
 
 const PureChart: React.FC<HomeDrawerScreenProps<'PureChart'>> = ({route, navigation}) => {
 
     const [activeDay, setActiveDay] = useState(1);
+    const [showPopupLogOut, setShowPopupLogOut] = useState(false)
     const dispatch = useAppDispatch();
 
     const isLogin: boolean = useSelector<RootState, boolean>(
@@ -47,6 +49,7 @@ const PureChart: React.FC<HomeDrawerScreenProps<'PureChart'>> = ({route, navigat
     }
 
     const logOut = () => {
+        dispatch(signOut());
         navigation.navigate('LogIn')
     };
 
@@ -54,12 +57,49 @@ const PureChart: React.FC<HomeDrawerScreenProps<'PureChart'>> = ({route, navigat
         navigation.navigate('Home')
     };
 
+    const goChart = () => {
+        navigation.navigate('PureChart')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureChart' }],
+        });
+    }
+
+    const goCoin= () => {
+        navigation.navigate('PureCoin')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureCoin' }],
+        });
+    }
+    const goGift= () => {
+        navigation.navigate('PureGift')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureGift' }],
+        });
+    }
+    const goMap= () => {
+        navigation.navigate('PureMap')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureMap' }],
+        });
+    }
+    const goWorld= () => {
+        navigation.navigate('PureWorld')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureWorld' }],
+        });
+    }
+
     return (
         <Background
             type='home'
             centerFocus={goHome}
             leftFocus={menu}
-            rightFocus={logOut}
+            rightFocus={isLogin ? () => setShowPopupLogOut(true) : logOut}
         >
             <View style={styles.container}>
                 <Chart
@@ -77,13 +117,18 @@ const PureChart: React.FC<HomeDrawerScreenProps<'PureChart'>> = ({route, navigat
                     <MaterialIcon name='arrow-forward-ios' color={Colors.BLUE_KV} size={20} />
                 </View>
                 <Footer
-                onPress_PureChart={() => navigation.navigate('PureChart')}
-                onPress_PureCoin={() => navigation.navigate('PureCoin')}
-                onPress_PureGift={() => navigation.navigate('PureGift')}
-                onPress_PureMap={() => navigation.navigate('PureMap')}
-                onPress_PureWorld={() => navigation.navigate('PureWorld')}
+            onPress_PureChart={goChart}
+            onPress_PureCoin={goCoin}
+            onPress_PureGift={goGift}
+            onPress_PureMap={goMap}
+            onPress_PureWorld={goWorld}
                 />
             </View>
+            <Dialog
+                isVisible={showPopupLogOut}
+                onPressCancel={() => setShowPopupLogOut(false)}
+                onPressLogout={logOut}
+            />
         </Background>
 
     )

@@ -1,5 +1,5 @@
 import { View, Text, StatusBar, Dimensions, Pressable, Image, StyleSheet } from 'react-native'
-import React from 'react'
+import React, {useState} from 'react'
 import { createDrawerNavigator, DrawerItem, DrawerContentScrollView } from '@react-navigation/drawer';
 import Home from '../../containers/Author/Home';
 import PureGift from '../../containers/Author/PureGift';
@@ -16,6 +16,10 @@ import Register from '../../containers/Authen/Register';
 import SendOTP from '../../containers/Authen/SendOTP';
 import { HomeDrawerParamList } from './DrawerNavigation';
 import Rules from '../../containers/Author/Rules';
+import { RootState, signOut, useAppDispatch } from '../../shared-state';
+import { useSelector } from 'react-redux';
+import { Users } from '../../../domain';
+import Dialog from '../../components/dialog/Dialog';
 
 const filterDrawer = [
     "Thế Giới Xanh",
@@ -28,6 +32,18 @@ const filterDrawer = [
 const Drawer = createDrawerNavigator<HomeDrawerParamList>();
 
 const DrawerNavigator = () => {
+    const dispatch = useAppDispatch();
+
+    const user: Users = useSelector<RootState, Users>(
+        (state) => state.user.userData
+    )
+
+    const isLogin: boolean = useSelector<RootState, boolean>(
+        (state) => state.user.isLogin
+    )
+
+    const [showPopupLogOut, setShowPopupLogOut] = useState(false)
+
     return (
         <Drawer.Navigator
             screenOptions={({ route }) => ({
@@ -67,20 +83,33 @@ const DrawerNavigator = () => {
 
                         {/* avatar */}
                         <View style={{
-                            marginTop: Dimensions.get('screen').height * 0.03
+                            marginTop: Dimensions.get('screen').height * 0.03,
                         }}>
-                            <Image source={{ uri: IMAGE_USER_DEFAUT }}
+                            <Image source={{ uri: isLogin ? user.avatar : IMAGE_USER_DEFAUT }}
                                 style={{
                                     resizeMode: 'contain',
                                     width: Dimensions.get('screen').width * 0.25,
                                     height: Dimensions.get('screen').height * 0.1,
                                 }} />
-                            <Text style={{
-                                fontSize: 14,
-                                fontWeight: '400',
-                                lineHeight: 16.8,
-                                color: Colors.GRAY_4
-                            }}>User is not sign in</Text>
+                            {
+                                !isLogin ?
+                                    <Text style={{
+                                        fontSize: 14,
+                                        fontWeight: '400',
+                                        lineHeight: 16.8,
+                                        color: Colors.GRAY_4
+                                    }}>User is not sign in</Text>
+                                    : <Text style={{
+                                        fontSize: 14,
+                                        fontWeight: '500',
+                                        lineHeight: 16.8,
+                                        color: Colors.BLACK,
+                                        marginStart: 10
+                                    }}>
+                                        {user.name}
+                                    </Text>
+                            }
+
                         </View>
 
                         {
@@ -127,7 +156,7 @@ const DrawerNavigator = () => {
 
                     </DrawerContentScrollView>
                     <Pressable
-                        onPress={() => props.navigation.navigate('LogIn')}
+                        onPress={() => { isLogin ? setShowPopupLogOut(true) : props.navigation.navigate('LogIn'); dispatch(signOut()) }}
                         style={{
                             position: 'absolute',
                             bottom: 0,
@@ -138,18 +167,30 @@ const DrawerNavigator = () => {
                             flexDirection: 'row',
                             paddingHorizontal: Dimensions.get('screen').width * 0.05,
                         }}>
-                        <IonIcon name='log-out-outline' size={24} color={Colors.BLUE_KV} />
+                        {
+                            isLogin ?
+                                <IonIcon name='log-out-outline' size={24} color={Colors.BLUE_KV} />
+                                :
+                                <IonIcon name='log-in-outline' size={24} color={Colors.BLUE_KV} />
+                        }
                         <Text style={{
                             fontSize: 16,
                             fontWeight: '500',
                             lineHeight: 19.2,
                             color: Colors.BLUE_KV,
                             marginStart: 10
-                        }}>Sign out</Text>
+                        }}>{
+                                isLogin ? 'Sign out' : 'Sign in'
+                            }</Text>
                     </Pressable>
+                    <Dialog
+                        isVisible={showPopupLogOut}
+                        onPressCancel={() => setShowPopupLogOut(false)}
+                        onPressLogout={() => { props.navigation.navigate('LogIn'); dispatch(signOut()); setShowPopupLogOut(false);}}
+                    />
                 </View>
             )}>
-            
+
             <Drawer.Screen name="PureWorld" component={PureWorld} />
             <Drawer.Screen name="PureGift" component={PureGift} />
             <Drawer.Screen name="PureMap" component={PureMap} />

@@ -1,19 +1,25 @@
-import { StyleSheet, Text, View, ScrollView, Image, Dimensions, FlatList } from 'react-native'
-import React, { useEffect } from 'react'
+import { StyleSheet, Text, View, ScrollView, Image, Dimensions } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Background from '../../components/background/Background'
-import { IMAGE_BG_BG_COIN, IMAGE_RIPPLE_RING, IMAGE_RIPPLE_RULES } from '../../../assets'
+import { IMAGE_RIPPLE_RULES } from '../../../assets'
 import { Colors } from '../../resource'
 import { QuantityGift } from '../../../domain/entity/QuantityGift'
 import { useSelector } from 'react-redux'
-import { RootState, useAppDispatch } from '../../shared-state'
+import { RootState, signOut, useAppDispatch } from '../../shared-state'
 import { getQuantityGift } from '../../shared-state/redux/reducers/QuantityGift'
 import Button from '../../components/button/Button'
 import Footer from '../../components/footer/Footer'
 import { HomeDrawerScreenProps } from '../../navigations/drawer/DrawerNavigation'
+import Dialog from '../../components/dialog/Dialog'
 
-const Rules : React.FC<HomeDrawerScreenProps<'Rules'>> = ({route, navigation}) => {
+const Rules: React.FC<HomeDrawerScreenProps<'Rules'>> = ({ route, navigation }) => {
 
   const dispatch = useAppDispatch();
+  const [showPopupLogOut, setShowPopupLogOut] = useState(false)
+
+  const isLogin: boolean = useSelector<RootState, boolean>(
+    (state) => state.user.isLogin
+)
 
   useEffect(() => {
     dispatch(getQuantityGift());
@@ -29,6 +35,7 @@ const Rules : React.FC<HomeDrawerScreenProps<'Rules'>> = ({route, navigation}) =
   }
 
   const logOut = () => {
+    dispatch(signOut());
     navigation.navigate('LogIn')
   };
 
@@ -36,12 +43,49 @@ const Rules : React.FC<HomeDrawerScreenProps<'Rules'>> = ({route, navigation}) =
     navigation.navigate('Home')
   };
 
+  const goChart = () => {
+    navigation.navigate('PureChart')
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'PureChart' }],
+    });
+  }
+
+  const goCoin = () => {
+    navigation.navigate('PureCoin')
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'PureCoin' }],
+    });
+  }
+  const goGift = () => {
+    navigation.navigate('PureGift')
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'PureGift' }],
+    });
+  }
+  const goMap = () => {
+    navigation.navigate('PureMap')
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'PureMap' }],
+    });
+  }
+  const goWorld = () => {
+    navigation.navigate('PureWorld')
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'PureWorld' }],
+    });
+  }
+
   return (
     <Background
       type='home'
       centerFocus={goHome}
       leftFocus={menu}
-      rightFocus={logOut}
+      rightFocus={isLogin ? () => setShowPopupLogOut(true) : logOut}
     >
       <Image source={{ uri: IMAGE_RIPPLE_RULES }} style={styles.imageBackground} />
       <View style={styles.container}>
@@ -329,14 +373,19 @@ const Rules : React.FC<HomeDrawerScreenProps<'Rules'>> = ({route, navigation}) =
             onPress={() => navigation.navigate('PureGift')}
           />
         </ScrollView>
-        <Footer 
-        onPress_PureChart={() => navigation.navigate('PureChart')}
-        onPress_PureCoin={() => navigation.navigate('PureCoin')}
-        onPress_PureGift={() => navigation.navigate('PureGift')}
-        onPress_PureMap={() => navigation.navigate('PureMap')}
-        onPress_PureWorld={() => navigation.navigate('PureWorld')}
+        <Footer
+          onPress_PureChart={goChart}
+          onPress_PureCoin={goCoin}
+          onPress_PureGift={goGift}
+          onPress_PureMap={goMap}
+          onPress_PureWorld={goWorld}
         />
       </View>
+      <Dialog
+                isVisible={showPopupLogOut}
+                onPressCancel={() => setShowPopupLogOut(false)}
+                onPressLogout={logOut}
+            />
     </Background>
   )
 }

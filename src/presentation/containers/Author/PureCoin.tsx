@@ -1,5 +1,5 @@
-import { Dimensions, Image, ImageBackground, ScrollView, StatusBar, StyleSheet, Text, View } from 'react-native'
-import React, { useEffect } from 'react'
+import { Dimensions, Image, ImageBackground, StyleSheet, Text, View } from 'react-native'
+import React, { useEffect, useState } from 'react'
 import Header from '../../components/header/Header'
 import { Colors } from '../../resource/values/colors'
 import IonIcon from 'react-native-vector-icons/Ionicons'
@@ -9,14 +9,25 @@ import { IMAGE_AVATAR, IMAGE_BG_BG_COIN, IMAGE_BG_COIN, IMAGE_STROKE_AQUFINA_BOT
 import { AuthorStackScreenProps } from '../../navigations/stack/AuthorNavigation'
 import Background from '../../components/background/Background'
 import { HomeDrawerScreenProps } from '../../navigations/drawer/DrawerNavigation'
+import { RootState, signOut, useAppDispatch } from '../../shared-state'
+import Dialog from '../../components/dialog/Dialog'
+import { useSelector } from 'react-redux'
 
 const PureCoin : React.FC<HomeDrawerScreenProps<'PureCoin'>> = ({route, navigation}) => {
+
+    const dispatch = useAppDispatch();
+    const [showPopupLogOut, setShowPopupLogOut] = useState(false)
+
+    const isLogin: boolean = useSelector<RootState, boolean>(
+        (state) => state.user.isLogin
+    )
 
     const menu = () => {
         navigation.openDrawer();
     }
 
     const logOut = () => {
+        dispatch(signOut());
         navigation.navigate('LogIn')
     };
 
@@ -24,12 +35,49 @@ const PureCoin : React.FC<HomeDrawerScreenProps<'PureCoin'>> = ({route, navigati
         navigation.navigate('Home')
     };
 
+    const goChart = () => {
+        navigation.navigate('PureChart')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureChart' }],
+        });
+    }
+
+    const goCoin= () => {
+        navigation.navigate('PureCoin')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureCoin' }],
+        });
+    }
+    const goGift= () => {
+        navigation.navigate('PureGift')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureGift' }],
+        });
+    }
+    const goMap= () => {
+        navigation.navigate('PureMap')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureMap' }],
+        });
+    }
+    const goWorld= () => {
+        navigation.navigate('PureWorld')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'PureWorld' }],
+        });
+    }
+
     return (
         <Background
             type='home'
             centerFocus={goHome}
             leftFocus={menu}
-            rightFocus={logOut}
+            rightFocus={isLogin ? () => setShowPopupLogOut(true) : logOut}
         >
             <View style={styles.container}>
                 <Text style={styles.textTitle} >Thông tin người chơi</Text>
@@ -82,13 +130,18 @@ const PureCoin : React.FC<HomeDrawerScreenProps<'PureCoin'>> = ({route, navigati
                 </Text>
                 <Image source={{ uri: IMAGE_STROKE_AQUFINA_BOTTOM }} style={styles.strokeAquafina} />
                 <Footer
-                onPress_PureChart={() => navigation.navigate('PureChart')}
-                onPress_PureCoin={() => navigation.navigate('PureCoin')}
-                onPress_PureGift={() => navigation.navigate('PureGift')}
-                onPress_PureMap={() => navigation.navigate('PureMap')}
-                onPress_PureWorld={() => navigation.navigate('PureWorld')}
+              onPress_PureChart={goChart}
+              onPress_PureCoin={goCoin}
+              onPress_PureGift={goGift}
+              onPress_PureMap={goMap}
+              onPress_PureWorld={goWorld}
                 />
             </View>
+            <Dialog
+                isVisible={showPopupLogOut}
+                onPressCancel={() => setShowPopupLogOut(false)}
+                onPressLogout={logOut}
+            />
         </Background>
 
     )

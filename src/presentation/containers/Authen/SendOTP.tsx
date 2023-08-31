@@ -37,8 +37,6 @@ const SendOTP: React.FC<HomeDrawerScreenProps<'SendOTP'>> = ({ route, navigation
             setIsReSend(false);
         }
 
-        console.log(type)
-
         return () => { }
     }, [time, setIsReSend])
 
@@ -56,6 +54,10 @@ const SendOTP: React.FC<HomeDrawerScreenProps<'SendOTP'>> = ({ route, navigation
     const logIn = () => {
         setIsRegister(false);
         navigation.navigate('LogIn');
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'LogIn' }],
+        });
     };
 
     const submit = () => {

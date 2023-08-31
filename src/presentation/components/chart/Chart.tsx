@@ -105,7 +105,7 @@ export const Chart: React.FC<ChartProps> = (props) => {
                     </View>
             }
 
-            <View style = {{borderWidth: 1}}>
+            <View >
             {
                 //đổ data vào list
                 listData.map((item, index) => {
@@ -248,7 +248,6 @@ const styles = StyleSheet.create({
     },
     listDay: {
         marginVertical: Dimensions.get('screen').height * 0.03,
-        borderWidth: 1,
         borderColor: Colors.RED
     },
     itemDay: {

@@ -93,6 +93,13 @@ export const getUsers = createAsyncThunk(
     }
 )
 
+export const signOut = createAsyncThunk(
+    'users/signOut',
+    async () => {
+
+    }
+)
+
 interface UserState {
     userData: Users;
     usersData: Users[];
@@ -117,11 +124,7 @@ const initialState: UserState = {
 const userSlice = createSlice({
     name: "user",
     initialState: initialState,
-    reducers: {
-        signOut: (state, action) => {
-            state.isLogin = action.payload;
-        },
-    },
+    reducers: {},
     extraReducers: (builder) => {
         builder
             .addCase(signUp.fulfilled, (state, action) => {
@@ -147,8 +150,11 @@ const userSlice = createSlice({
             .addCase(getUsers.rejected, (state, action) => {
                 //thất bại
             })
+            .addCase(signOut.fulfilled, (state, action) => {
+                state.isLogin = false;
+            })
     }
 })
 
-export const { signOut } = userSlice.actions;
+export const { } = userSlice.actions;
 export const userReducer = userSlice.reducer;

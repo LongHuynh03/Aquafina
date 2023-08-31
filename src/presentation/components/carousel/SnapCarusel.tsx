@@ -17,11 +17,12 @@ export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.5);
 
 interface CarouselProps {
   isShowPagination: 'flex' | 'none' | undefined;
+  onPress?: () => void;
 };
 
 const SnapCarousel: React.FC<CarouselProps> = (props) => {
 
-  const { isShowPagination } = props;
+  const { isShowPagination, onPress } = props;
   const dispatch = useAppDispatch();
 
   const [indexActive, setIndexActive] = useState(0);
@@ -108,7 +109,7 @@ const SnapCarousel: React.FC<CarouselProps> = (props) => {
       {
         isShowPagination == 'flex' ?
           <View style = {styles.boxButton}>
-            <Pressable style= {styles.button}>
+            <Pressable style= {styles.button} onPress={onPress}>
                 <Text style= {styles.textButton}>Khám phá ngay</Text>
             </Pressable>
             <Pagination

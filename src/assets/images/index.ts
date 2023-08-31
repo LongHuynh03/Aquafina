@@ -95,3 +95,5 @@ export const ICON_COIN_FOCUS = 'https://firebasestorage.googleapis.com/v0/b/aqua
 export const ICON_CHART = 'https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Icon-Chart.png?alt=media&token=9013fa87-3957-4096-9760-57b20832cc87'
 
 export const ICON_CHART_FOCUS = 'https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Icon-Chart_Focus.png?alt=media&token=28c9a811-9c2f-401a-9ff8-023678b7aa7c'
+
+export const IMAGE_POPUP_HAPPY = 'https://firebasestorage.googleapis.com/v0/b/aquafina-6961c.appspot.com/o/Image-PopupHappy.png?alt=media&token=efc14e7b-257d-45a8-b275-84565dd00fdd'

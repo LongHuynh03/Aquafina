@@ -29,6 +29,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         justifyContent: "center",
         borderRadius: 8,
+        borderWidth: 0.1,
+        elevation: 10
     },
     title: {
         fontSize: 14,
