@@ -22,7 +22,7 @@ const PureWorld : React.FC<HomeDrawerScreenProps<'PureWorld'>> = ({route, naviga
     };
 
     const goHome = () => {
-        console.log(123)
+        navigation.navigate('Home')
     };
 
     return (

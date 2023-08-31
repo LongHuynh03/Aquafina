@@ -1,5 +1,5 @@
-import { StatusBar, Dimensions, ScrollView, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
-import React, { useState, useRef, useEffect } from 'react'
+import { Alert, Dimensions, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import Header from '../../components/header/Header'
 import FoundationIcon from 'react-native-vector-icons/Foundation'
 import { Colors } from '../../resource/values/colors'
@@ -7,43 +7,85 @@ import { IMAGE_FOOTER_AUTHEN, IMAGE_TEXT_WELLCOME } from '../../../assets/images
 import { OTPField } from '../../components/textfield/TextField'
 import Button from '../../components/button/Button'
 import LinearGradient from 'react-native-linear-gradient'
-import { AuthenStackScreenProps } from '../../navigations/stack/AuthenNavigation'
 import { HomeDrawerScreenProps } from '../../navigations/drawer/DrawerNavigation'
+import { RootState, getData, signIn, signUp, useAppDispatch } from '../../shared-state'
+import { useSelector } from 'react-redux'
+import Background from '../../components/background/Background'
 
-const SendOTP : React.FC<HomeDrawerScreenProps<'SendOTP'>> = ({route, navigation}) => {
+const SendOTP: React.FC<HomeDrawerScreenProps<'SendOTP'>> = ({ route, navigation }) => {
 
     const [isReSend, setIsReSend] = useState(true);
     const [time, setTime] = useState(30);
+    const [code_1, setCode_1] = useState('');
+    const [code_2, setCode_2] = useState('');
+    const [code_3, setCode_3] = useState('');
+    const [code_4, setCode_4] = useState('');
+    const [falseOTP, setFalseOTP] = useState(false);
+    const [isRegister, setIsRegister] = useState(false);
 
-    // const phone = route.params?.phone;
+    const phone: string | undefined = route.params?.phone;
+    const name = route.params?.name;
+    const type = route?.params?.type;
+
+    const dispatch = useAppDispatch();
 
     useEffect(() => {
         if (isReSend && time >= 1) {
-            setTimeout(() => setTime((time) => time -= 1), 100);
+            setTimeout(() => setTime((time) => time -= 1), 1000);
         }
         if (time == 1) {
             setIsReSend(false);
         }
+
+        console.log(type)
+
         return () => { }
     }, [time, setIsReSend])
 
     const decTime = () => {
-        setIsReSend(true);
-        setTime(30);
-        setTimeout(() => setTime((time) => time -= 1), 100);
+        if (time <= 0) {
+            setIsReSend(true);
+            setTime(30);
+        }
     }
 
     const goHome = () => {
         navigation.navigate('Home')
     };
 
+    const logIn = () => {
+        setIsRegister(false);
+        navigation.navigate('LogIn');
+    };
+
     const submit = () => {
-        
+        const code = code_1.toString() + code_2.toString() + code_3.toString() + code_4.toString();
+        const data: getData = {
+            phone: phone ? phone : '',
+            name: name,
+        }
+        if (code == '1111') {
+            console.log('Đúng code');
+            if (type == 'login') {
+                dispatch(signIn(data))
+                navigation.navigate('Home');
+            }
+            else {
+                dispatch(signUp(data))
+                setIsRegister(true);
+            }
+        }
+        else {
+            Alert.alert("Mã OTP không đúng");
+        }
     };
 
     return (
-        <ScrollView>
-            <StatusBar barStyle={'light-content'} translucent />
+        <Background
+            type='authen'
+            centerFocus={goHome}
+            leftFocus={goHome}
+        >
             <View style={styles.container}>
                 <Header
                     leftIcon={
@@ -54,35 +96,79 @@ const SendOTP : React.FC<HomeDrawerScreenProps<'SendOTP'>> = ({route, navigation
                 <View style={styles.viewImge}>
                     <Image source={{ uri: IMAGE_TEXT_WELLCOME }} style={styles.imgWellcome} />
                 </View>
-                <Text style={styles.txtLogin}>NHẬP OTP</Text>
-                <OTPField
-                    // phone={phone}
-                />
-                <View style={styles.footer}>
-                    <Image source={{ uri: IMAGE_FOOTER_AUTHEN }} style={styles.imgFooter} />
-                    <LinearGradient colors={[Colors.WHITE_0, Colors.WHITE_93, Colors.WHITE]} style={styles.boxButton}>
-                        <Button
-                            containerStyle={styles.btnLogin}
-                            titleStyle={styles.titleLogin}
-                            title='Xác nhận'
-                            onPress={submit}
-                        />
-                        {
-                            isReSend ?
-                                <Text style={styles.txtNotif}>
-                                    Mã sẽ được gửi trong vòng
-                                    <Text style={styles.txtTime}> {time} GIÂY</Text>
-                                </Text>
-                                :
-                                <></>
-                        }
-                        <TouchableOpacity onPress={decTime}>
-                            <Text style={styles.txtReSend}>Gửi lại mã</Text>
-                        </TouchableOpacity>
-                    </LinearGradient>
-                </View>
+                {
+                    !isRegister ?
+                        <View style={styles.boxOtp}>
+                            <Text style={styles.txtLogin}>NHẬP OTP</Text>
+                            <OTPField
+                                phone={phone}
+                                status={falseOTP}
+                                inputProps_1={{
+                                    keyboardType: 'phone-pad',
+                                    value: code_1,
+                                    onChangeText: (text) => { setCode_1(text) }
+                                }}
+                                inputProps_2={{
+                                    keyboardType: 'phone-pad',
+                                    value: code_2,
+                                    onChangeText: (text) => { setCode_2(text) }
+                                }}
+                                inputProps_3={{
+                                    keyboardType: 'phone-pad',
+                                    value: code_3,
+                                    onChangeText: (text) => { setCode_3(text) }
+                                }}
+                                inputProps_4={{
+                                    keyboardType: 'phone-pad',
+                                    value: code_4,
+                                    onChangeText: (text) => { setCode_4(text) }
+                                }}
+                            />
+                            <View style={styles.footer}>
+                                <Image source={{ uri: IMAGE_FOOTER_AUTHEN }} style={styles.imgFooter} />
+                                <LinearGradient colors={[Colors.WHITE_0, Colors.WHITE_93, Colors.WHITE]} style={styles.boxButton}>
+                                    <Button
+                                        containerStyle={styles.btnLogin}
+                                        titleStyle={styles.titleLogin}
+                                        title='Xác nhận'
+                                        onPress={submit}
+                                    />
+                                    {
+                                        isReSend ?
+                                            <Text style={styles.txtNotif}>
+                                                Mã sẽ được gửi trong vòng
+                                                <Text style={styles.txtTime}> {time} GIÂY</Text>
+                                            </Text>
+                                            :
+                                            <></>
+                                    }
+                                    <TouchableOpacity onPress={decTime}>
+                                        <Text style={styles.txtReSend}>Gửi lại mã</Text>
+                                    </TouchableOpacity>
+                                </LinearGradient>
+                            </View>
+                        </View>
+                        :
+                        <View style={styles.boxNotification}>
+                            <Text style={styles.textTitle}>Đăng ký thành công</Text>
+                            <Text style={styles.text}>Vui lòng đăng nhập để bắt đầu chương trình</Text>
+                            <View style={styles.footer}>
+                                <Image source={{ uri: IMAGE_FOOTER_AUTHEN }} style={styles.imgFooter} />
+                                <LinearGradient colors={[Colors.WHITE_0, Colors.WHITE_93, Colors.WHITE]} style={styles.boxButton}>
+                                    <Button
+                                        containerStyle={styles.btnLogin}
+                                        titleStyle={styles.titleLogin}
+                                        title='Đăng nhập'
+                                        onPress={logIn}
+                                    />
+                                </LinearGradient>
+                            </View>
+                        </View>
+                }
+
             </View>
-        </ScrollView>
+        </Background>
+
     )
 }
 
@@ -92,7 +178,8 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: Colors.WHITE,
-        height: Dimensions.get('screen').height
+        height: Dimensions.get('screen').height,
+        flexDirection: 'column',
     },
     viewImge: {
         width: Dimensions.get('screen').width,
@@ -174,4 +261,25 @@ const styles = StyleSheet.create({
         color: Colors.BLUE_KV,
         marginTop: Dimensions.get('screen').height * 0.01
     },
+    boxOtp: {
+        height: Dimensions.get('screen').height * 0.8
+    },
+    boxNotification: {
+        height: Dimensions.get('screen').height * 0.8,
+        alignItems: 'center',
+    },
+    text: {
+        fontSize: 14,
+        fontWeight: '400',
+        color: Colors.GRAY_5,
+        lineHeight: 16.8,
+        marginTop: Dimensions.get('screen').height * 0.03
+    },
+    textTitle: {
+        fontSize: 22,
+        fontWeight: '500',
+        color: Colors.BLUE_500,
+        lineHeight: 26.4,
+        marginTop: Dimensions.get('screen').height * 0.1
+    }
 })

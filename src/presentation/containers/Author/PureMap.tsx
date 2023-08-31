@@ -22,7 +22,7 @@ const PureMap: React.FC<HomeDrawerScreenProps<'PureMap'>> = ({route, navigation}
     };
 
     const goHome = () => {
-        console.log(123)
+        navigation.navigate('Home')
     };
 
     return (

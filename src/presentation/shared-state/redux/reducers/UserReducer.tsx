@@ -1,34 +1,66 @@
 import { createSlice, createAsyncThunk } from "@reduxjs/toolkit";
 import { Users } from "../../../../domain";
 import { firebaseConfig } from "../../../../core";
+import { IMAGE_AVATAR } from "../../../../assets";
 
-export const signUp = createAsyncThunk(
-    'user/register',
-    async (user: Users) => {
-        const response = await firebaseConfig.ref('/Users')
-            .push()
-            .set(user, ((error: Error | null) => {
-                if (error) {
-                    console.log(error?.message);
-                }
-            }))
-    }
-)
+export interface getData {
+    phone: string | ''
+    name?: string
+}
 
 export const signIn = createAsyncThunk(
     'user/login',
-    async (phone: string) => {
-        const user = await firebaseConfig.ref('/Users')
-            .orderByChild('phone')
-            .equalTo(phone)
-            .once('value', (value: any) => {
-                value.forEach((item: any) => {
-                    console.log(item.val());
+    async (data: getData) => {
+        let get: Users = {
+            keyUser: '',
+            rank: 0,
+        }
+        try {
+            const user = await firebaseConfig.ref('Users')
+                .orderByChild('phone')
+                .equalTo(data.phone)
+                .limitToFirst(1)
+                .once('value', (value: any) => {
+                    value.forEach((item: any) => {
+                        if (item != undefined || item != null) {
+                            get.keyUser = item.key;
+                            get.avatar = item.val().avatar;
+                            get.name = item.val().name;
+                            get.phone = item.val().phone;
+                            get.point = item.val().point;
+                            get.rank = item.val().rank;
+                        }
+                    })
                 });
-            })
+            return get;
+        } catch (error) {
+            console.log(error);
+            return get;
+        }
     }
 )
 
+export const signUp = createAsyncThunk(
+    'user/register',
+    async (data: getData) => {
+        try {
+            const newUser: Users = {
+                keyUser: '',
+                name: data.name,
+                phone: data.phone,
+                avatar: IMAGE_AVATAR,
+                point: 0,
+                rank: 0,
+            }
+            const addUser = firebaseConfig.ref('/Users').push();
+            await addUser.set(newUser);
+        } catch (error) {
+            console.log(error);
+        }
+    }
+)
+
+//lấy danh sách Users
 export const getUsers = createAsyncThunk(
     'users/getAll',
     async (quantity: number) => {
@@ -64,6 +96,8 @@ export const getUsers = createAsyncThunk(
 interface UserState {
     userData: Users;
     usersData: Users[];
+    isLogin: boolean;
+    isRegister: boolean;
 }
 
 const initialState: UserState = {
@@ -76,42 +110,45 @@ const initialState: UserState = {
         rank: 0,
     },
     usersData: [],
+    isLogin: false, // có đang đăng nhập hay không
+    isRegister: false, // đăng ký thành công không
 }
 
 const userSlice = createSlice({
     name: "user",
     initialState: initialState,
     reducers: {
-        addUser: (state, action) => {
-            state.userData = action.payload;
+        signOut: (state, action) => {
+            state.isLogin = action.payload;
         },
     },
     extraReducers: (builder) => {
         builder
-            .addCase(signUp.pending, (state, action) => {
-                console.log("Đang thực hiện");
-            })
             .addCase(signUp.fulfilled, (state, action) => {
-                console.log("Thành công");
+                //thành công
+                state.isRegister = true;
             })
             .addCase(signUp.rejected, (state, action) => {
-                console.log("Thất bại");
+                //thất bại
             })
             .addCase(signIn.fulfilled, (state, action) => {
-                console.log("Thành công");
+                //thành công
+                console.log('true')
+                state.userData = action.payload;
+                state.isLogin = true;
             })
             .addCase(signIn.rejected, (state, action) => {
-                console.log("Thất bại");
+                //thất bại
             })
             .addCase(getUsers.fulfilled, (state, action) => {
                 state.usersData = action.payload;
-                console.log("Thành công");
+                //thành công
             })
             .addCase(getUsers.rejected, (state, action) => {
-                console.log("Thất bại");
+                //thất bại
             })
     }
 })
 
-export const { addUser } = userSlice.actions;
+export const { signOut } = userSlice.actions;
 export const userReducer = userSlice.reducer;

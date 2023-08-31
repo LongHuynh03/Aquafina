@@ -26,7 +26,6 @@ export const TextField: React.FC<TextFieldProps> = (props) => {
             <Text style={styles.txt}>{title}</Text>
             <TextInput
                 {...input}
-                keyboardType='phone-pad'
                 style={styles.edt}
                 placeholder={placeholder}
             />

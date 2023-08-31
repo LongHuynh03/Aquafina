@@ -22,6 +22,7 @@ export const Colors = {
     BG_SCREEN : 'rgba(232, 237, 242, 1)',
     BG_CONTENT_1: 'rgba(240, 250, 255, 1)',
     BG_CONTENT_0: 'rgba(240, 250, 255, 0)',
+    BG_CONTENT_300: 'rgba(0, 0, 0, 0.3)',
     GRAY_TEXT: 'rgba(83, 82, 97, 1)',
     TEXT_COIN: 'rgba(255, 184, 0, 1)',
     WHITE_20: 'rgba(255, 255, 255, 0.2)',

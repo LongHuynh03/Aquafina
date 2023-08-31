@@ -12,43 +12,34 @@ import { firebaseConfig } from '../../../core'
 import { Chart } from '../../components'
 import Background from '../../components/background/Background'
 import { HomeDrawerScreenProps } from '../../navigations/drawer/DrawerNavigation'
+import { useSelector } from 'react-redux'
+import { RootState, getUsers, useAppDispatch } from '../../shared-state'
 
 
 const PureChart: React.FC<HomeDrawerScreenProps<'PureChart'>> = ({route, navigation}) => {
 
     const [activeDay, setActiveDay] = useState(1);
-    const [listUsers, setListUsers] = useState<Users[]>([]);
+    const dispatch = useAppDispatch();
+
+    const isLogin: boolean = useSelector<RootState, boolean>(
+        (state) => state.user.isLogin
+    )
+
+    const user: Users = useSelector<RootState, Users>(
+        (state) => state.user.userData
+    )
+
+    const listUsers: Users[] = useSelector<RootState, Users[]>(
+        (state) => state.user.usersData
+    );
 
     useEffect(() => {
-
-        const getUsers = async () => {
-            const users = await firebaseConfig.ref('/Users')
-                .once('value', (value: any) => {
-                    let list: Users[] = [];
-                    value.forEach((item: any) => {
-                        if (item.val().rank <= 10) {
-                            let user: Users = {
-                                keyUser: "1",
-                                rank: 0,
-                            }
-                            user.keyUser = item.key;
-                            user.avatar = item.val().avatar;
-                            user.name = item.val().name;
-                            user.phone = item.val().phone;
-                            user.point = item.val().point;
-                            user.rank = item.val().rank;
-                            list.push(user);
-                        }
-                    });
-                    list.sort((a, b) => a.rank - b.rank);
-                    setListUsers(list);
-                })
-        };
-
-        getUsers();
-
-        return () => { }
+        dispatch(getUsers(10));
+      return () => {
+        
+      }
     }, [])
+    
 
 
     const menu = () => {
@@ -60,7 +51,7 @@ const PureChart: React.FC<HomeDrawerScreenProps<'PureChart'>> = ({route, navigat
     };
 
     const goHome = () => {
-        console.log(123)
+        navigation.navigate('Home')
     };
 
     return (
@@ -72,9 +63,10 @@ const PureChart: React.FC<HomeDrawerScreenProps<'PureChart'>> = ({route, navigat
         >
             <View style={styles.container}>
                 <Chart
-                    isLogin={false}
+                    isLogin={isLogin}
                     listData={listUsers}
-                    where='home'
+                    dataUser={user}
+                    where='pure'
                 />
                 <View style={styles.boxQuantity}>
                     <MaterialIcon name='arrow-back-ios-new' color={Colors.BLUE_KV} size={20} />
@@ -105,116 +97,7 @@ const styles = StyleSheet.create({
         backgroundColor: Colors.WHITE,
         alignItems: 'center',
         justifyContent: 'center',
-    },
-    boxChart: {
-        alignItems: 'center',
-        justifyContent: 'center',
-        backgroundColor: Colors.BLUE_KV,
-        marginTop: Dimensions.get('screen').height * 0.03
-    },
-    boxTitle: {
-        width: Dimensions.get('screen').width * 0.5,
-        height: Dimensions.get('screen').height * 0.04,
-        backgroundColor: Colors.BLUE_300,
-        justifyContent: 'center',
-        alignItems: 'center',
-        borderRadius: 7,
-        marginTop: - Dimensions.get('screen').height * 0.02
-    },
-    textTitle: {
-        fontSize: 18,
-        fontWeight: '700',
-        lineHeight: 21.6,
-        color: Colors.WHITE
-    },
-    imageBGBGCoin: {
-        position: 'absolute',
-        resizeMode: 'contain',
-        width: Dimensions.get('screen').width * 0.7,
-        height: Dimensions.get('screen').height * 0.6,
-        end: Dimensions.get('screen').width * 0.7,
-        top: '-5%',
-        opacity: 0.5,
-        zIndex: 1
-    },
-    listDay: {
-        marginVertical: Dimensions.get('screen').height * 0.03,
-    },
-    itemDay: {
-        borderWidth: 1,
-        borderColor: Colors.WHITE,
-        padding: Dimensions.get('screen').width * 0.02,
-        borderRadius: 3,
-        marginEnd: Dimensions.get('screen').width * 0.05
-    },
-    itemDayChoose: {
-        borderWidth: 1,
-        borderColor: Colors.WHITE,
-        padding: Dimensions.get('screen').width * 0.02,
-        borderRadius: 3,
-        marginEnd: Dimensions.get('screen').width * 0.05,
-        backgroundColor: Colors.WHITE,
-    },
-    textDay: {
-        fontSize: 14,
-        fontWeight: '500',
-        lineHeight: 16.8,
-        color: Colors.WHITE,
-    },
-    textDayChoose: {
-        fontSize: 14,
-        fontWeight: '500',
-        lineHeight: 16.8,
-        color: Colors.BLUE_KV,
-    },
-    textHangCuaToi: {
-        fontSize: 14,
-        fontWeight: '500',
-        lineHeight: 16.8,
-        color: Colors.WHITE,
-        margin: Dimensions.get('screen').height * 0.005
-    },
-    boxMyrank: {
-        width: Dimensions.get('screen').width * 0.8,
-        flexDirection: 'row',
-        justifyContent: 'space-between',
-        borderWidth: 1,
-        borderColor: Colors.WHITE,
-        backgroundColor: Colors.WHITE_20,
-        borderRadius: 6,
-        padding: Dimensions.get('screen').width * 0.02,
-        margin: Dimensions.get('screen').height * 0.01
-    },
-    left: {
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-    },
-    textRank: {
-        fontSize: 11,
-        fontWeight: '500',
-        lineHeight: 13.2,
-        color: Colors.WHITE,
-    },
-    imageUser: {
-        resizeMode: 'contain',
-        width: Dimensions.get('screen').width * 0.07,
-        height: Dimensions.get('screen').width * 0.07,
-        marginStart: Dimensions.get('screen').width * 0.03,
-    },
-    textName: {
-        marginStart: Dimensions.get('screen').width * 0.03,
-        fontSize: 11,
-        fontWeight: '500',
-        lineHeight: 13.2,
-        color: Colors.WHITE,
-    },
-    textPoint: {
-        textAlignVertical: 'center',
-        fontSize: 11,
-        fontWeight: '500',
-        lineHeight: 13.2,
-        color: Colors.WHITE,
+        marginTop: Dimensions.get('screen').height * 0.2
     },
     boxQuantity: {
         flexDirection: 'row',

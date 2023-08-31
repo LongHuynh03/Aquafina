@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View, Image, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, Image, Dimensions, Modal } from 'react-native'
 import React, { useEffect } from 'react'
 import Background from '../../components/background/Background'
 import SnapCarousel from '../../components/carousel/SnapCarusel'
@@ -9,14 +9,13 @@ import { RootState, getUsers, useAppDispatch } from '../../shared-state'
 import { getBannsers } from '../../shared-state/redux/reducers/BannerReducer'
 import { Colors } from '../../resource'
 import Button from '../../components/button/Button'
-import { IMAGE_BANNER_4, IMAGE_BG_BG_COIN, IMAGE_MAP_HOME, IMAGE_STROKE_AQUFINA_TOP, IMAGE_TEXT_XANK, IMAGE_TONG_CHAI_THU_DUOC } from '../../../assets'
+import { IMAGE_BG_BG_COIN, IMAGE_MAP_HOME, IMAGE_TEXT_XANK, IMAGE_TONG_CHAI_THU_DUOC } from '../../../assets'
 import { Chart } from '../../components'
 import { Users } from '../../../domain'
 import Footer from '../../components/footer/Footer'
 import { HomeDrawerScreenProps } from '../../navigations/drawer/DrawerNavigation'
 
-const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({route, navigation}) => {
-// const Home = () => {
+const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) => {
 
     const dispatch = useAppDispatch();
 
@@ -28,9 +27,17 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({route, navigation}) => {
         (state) => state.user.usersData
     );
 
+    const isLogin: boolean = useSelector<RootState, boolean>(
+        (state) => state.user.isLogin
+    )
+
+    const user: Users = useSelector<RootState, Users>(
+        (state) => state.user.userData
+    )
+
     useEffect(() => {
         dispatch(getBannsers());
-        dispatch(getUsers(5));
+        dispatch(getUsers(11));
         return () => { }
     }, [])
 
@@ -46,12 +53,16 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({route, navigation}) => {
         console.log(123)
     };
 
+    const goChart = () => {
+        navigation.navigate('PureChart')
+    }
+
     return (
-        <Background 
-        type='home'
-        centerFocus={goHome}
-        leftFocus={menu}
-        rightFocus={logOut}
+        <Background
+            type='home'
+            centerFocus={goHome}
+            leftFocus={menu}
+            rightFocus={logOut}
         >
             <View style={styles.container}>
                 <View style={styles.boxbanner}>
@@ -80,9 +91,11 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({route, navigation}) => {
                     <Image source={{ uri: IMAGE_TONG_CHAI_THU_DUOC }} style={styles.imageSumBottle} />
                 </View>
                 <Chart
-                    isLogin={false}
-                    listData={listUsers}
+                    isLogin={isLogin}
+                    listData={listUsers.slice(0, 5)}
+                    dataUser={user}
                     where='home'
+                    onPress={isLogin ? goChart : logOut}
                 />
                 <View style={styles.boxGift} >
                     <Image source={{ uri: IMAGE_BG_BG_COIN }} style={styles.imageBGBG} />
@@ -100,18 +113,31 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({route, navigation}) => {
                 <View style={styles.boxMap}>
                     <Image source={{ uri: IMAGE_MAP_HOME }} style={styles.imageBanner} />
                     <Button
-                        containerStyle={[styles.buttonBanner, {bottom: Dimensions.get('screen').height * 0.02}]}
+                        containerStyle={[styles.buttonBanner, { bottom: Dimensions.get('screen').height * 0.02 }]}
                         title='Khám phá ngay'
                         titleStyle={styles.textBanner} />
                 </View>
                 <Footer
-                onPress_PureChart={() => navigation.navigate('PureChart')}
-                onPress_PureCoin={() => navigation.navigate('PureCoin')}
-                onPress_PureGift={() => navigation.navigate('PureGift')}
-                onPress_PureMap={() => navigation.navigate('PureMap')}
-                onPress_PureWorld={() => navigation.navigate('PureWorld')}
+                    onPress_PureChart={() => navigation.navigate('PureChart')}
+                    onPress_PureCoin={() => navigation.navigate('PureCoin')}
+                    onPress_PureGift={() => navigation.navigate('PureGift')}
+                    onPress_PureMap={() => navigation.navigate('PureMap')}
+                    onPress_PureWorld={() => navigation.navigate('PureWorld')}
                 />
             </View>
+            {
+                isLogin ?
+                    <Modal
+                        animationType="slide"
+                        transparent={true}
+                        visible={true}>
+                        <View style={styles.boxNotifi}>
+
+                        </View>
+                    </Modal>
+                    :
+                    <View></View>
+            }
         </Background>
     )
 }
@@ -218,5 +244,11 @@ const styles = StyleSheet.create({
     },
     boxMap: {
         alignItems: 'center',
+    },
+    boxNotifi: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: "rgba(0, 0, 0, 0.5)",
     }
 })

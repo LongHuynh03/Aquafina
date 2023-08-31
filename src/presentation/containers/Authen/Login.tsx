@@ -1,5 +1,5 @@
-import { StatusBar, Dimensions, ScrollView, Image, StyleSheet, Text, View } from 'react-native'
-import React, { useState } from 'react'
+import { Alert, Dimensions, Image, StyleSheet, Text, View } from 'react-native'
+import React, { useState, useEffect } from 'react'
 import Header from '../../components/header/Header'
 import FoundationIcon from 'react-native-vector-icons/Foundation'
 import { Colors } from '../../resource/values/colors'
@@ -7,34 +7,76 @@ import { IMAGE_FOOTER_AUTHEN, IMAGE_TEXT_WELLCOME } from '../../../assets/images
 import Button from '../../components/button/Button'
 import { TextField } from '../../components/textfield/TextField'
 import { HomeDrawerScreenProps } from '../../navigations/drawer/DrawerNavigation'
+import { Users } from '../../../domain'
+import { firebaseConfig } from '../../../core'
+import Background from '../../components/background/Background'
+import { useSelector } from 'react-redux'
+import { RootState } from '../../shared-state'
 
-    const Login: React.FC<HomeDrawerScreenProps<'LogIn'>> = ({route, navigation})=> {
+const Login: React.FC<HomeDrawerScreenProps<'LogIn'>> = ({ route, navigation }) => {
 
     const [phone, setPhone] = useState('');
+    const isLogin: boolean = useSelector<RootState, boolean>(
+            (state) => state.user.isLogin
+        )
 
     const goHome = () => {
         navigation.navigate('Home')
     };
 
-    const logIn = () => {
-        navigation.navigate('SendOTP', {
-            phone: phone,
-        });
+    useEffect(() => {
+        console.log(isLogin)
+      return () => {}
+    }, [])
+    
+
+    const logIn = async () => {
+        let list: Users[] = [];
+        try {
+            const user = await firebaseConfig.ref('Users')
+                .orderByChild('phone')
+                .equalTo(phone)
+                .limitToFirst(1)
+                .once('value', (value: any) => {
+                    value.forEach((item: any) => {
+                        if (item != undefined || item != null) {
+                            list.push(item);
+                            navigation.navigate('SendOTP', {
+                                phone: phone,
+                                type: 'login'
+                            });
+                            setPhone('');
+                        }
+                    })
+                }).then(() => {
+                    if (list.length == 0) {
+                        Alert.alert("Tài khoản không tồn tại");
+                    }
+                });
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     const register = () => {
         navigation.navigate('Register');
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Register' }],
+        });
     };
 
     return (
-        <ScrollView>
-            <StatusBar barStyle={'light-content'} translucent/>
+        <Background
+            type='authen'
+        >
             <View style={styles.container}>
                 <Header
                     leftIcon={
                         <FoundationIcon name="home" size={30} color={Colors.GRAY_5} />
                     }
                     leftFocus={goHome}
+                    centerFocus={goHome}
                 />
                 <View style={styles.viewImge}>
                     <Image source={{ uri: IMAGE_TEXT_WELLCOME }} style={styles.imgWellcome} />
@@ -44,6 +86,8 @@ import { HomeDrawerScreenProps } from '../../navigations/drawer/DrawerNavigation
                     title='Số điện thoại'
                     placeholder='Nhập số điện thoại của bạn'
                     input={{
+                        keyboardType: 'phone-pad',
+                        value: phone,
                         onChangeText: (text) => { setPhone(text) }
                     }} />
                 <View style={styles.footer}>
@@ -65,7 +109,8 @@ import { HomeDrawerScreenProps } from '../../navigations/drawer/DrawerNavigation
                     </View>
                 </View>
             </View>
-        </ScrollView>
+        </Background>
+
     )
 }
 

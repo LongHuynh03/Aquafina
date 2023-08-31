@@ -17,7 +17,11 @@ type LoginProps = {};
 
 type RegisterProps = {};
 
-type SendOTPProps = {};
+type SendOTPProps = {
+    phone?: string;
+    name?: string;
+    type?: string;
+};
 
 type RuleProps = {};
 

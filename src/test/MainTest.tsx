@@ -1,7 +1,7 @@
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React, { useEffect } from 'react'
 import { useSelector  } from 'react-redux';
-import { RootState, getUsers, signIn, signUp, useAppDispatch, userReducer } from '../presentation/shared-state';
+import { RootState, getData, getUsers, signIn, signUp, useAppDispatch, userReducer } from '../presentation/shared-state';
 import { Users } from '../domain';
 import { getBannsers } from '../presentation/shared-state/redux/reducers/BannerReducer';
 import { Banners } from '../domain/entity/Banner';
@@ -12,49 +12,31 @@ const MainTest = () => {
 
   const dispatch = useAppDispatch();
 
-  //lấy list User từ store
-  // const listUsers : Users[] = useSelector<RootState, Users[]>(
-  //   (state) => state.user.usersData
-  // );
+  const userData:Users = useSelector<RootState, Users>(
+    (state) => state.user.userData
+  )
 
-  // const listBanner : Banners[] = useSelector<RootState, Banners[]>(
-  //   (state) => state.banner.banners
-  // );
-
-  const listQuantityGift : QuantityGift[] = useSelector<RootState, QuantityGift[]>(
-    (state) => state.quantityGift.list
-  );
-
-
-  useEffect(() => {
-
-    //lấy list User từ firebase
-    // dispatch(getUsers(3));
-    // dispatch(getBannsers());
-    dispatch(getQuantityGift());
-    
-    return () => {}
-  }, [])
-  
-
-  const user: Users = {
-    keyUser: '0',
-    rank: 1,
-    name: 'Long',
-    avatar: '',
-    phone: '0943055138',
-    point: 100
+  const user: getData= {
+    phone: '0767375921',
+    // phone: '1',
+    name: 'long'
   };
 
+  useEffect(() => {
+    dispatch(signIn(user))
+    return () => {}
+  }, [user])
+  
+
+
+
   const onClick = () => {
-    // dispatch(signIn('0943055138'))
-    // dispatch(signUp(user));
-    // dispatch(getUsers(3));
+    console.log(userData);
   }
 
   return (
     <View style={styles.stylesContainer}>
-      <Text style={styles.textOutput}>{listQuantityGift.length}</Text>
+      {/* <Text style={styles.textOutput}>{key}</Text> */}
       <TouchableOpacity onPress={onClick} style = {styles.btn}>
         <Text style={styles.textButton}>Click</Text>
       </TouchableOpacity>

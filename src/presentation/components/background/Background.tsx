@@ -8,9 +8,9 @@ import { Colors } from '../../resource';
 interface BackgroundProps {
     children: React.ReactNode;
     type: string;
-    leftFocus: () => void;
-    rightFocus: () => void;
-    centerFocus: () => void;
+    leftFocus?: () => void;
+    rightFocus?: () => void;
+    centerFocus?: () => void;
 }
 
 const Background: React.FC<BackgroundProps> = (props) => {

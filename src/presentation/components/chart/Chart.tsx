@@ -53,13 +53,14 @@ const DATADATE = [
 interface ChartProps {
     where: string;
     listData: Users[];
-    // dataUser: Users;
+    dataUser: Users;
     isLogin: boolean;
+    onPress?: () => void;
 }
 
 export const Chart: React.FC<ChartProps> = (props) => {
 
-    const { where, listData, isLogin } = props;
+    const { where, listData, isLogin, dataUser, onPress } = props;
 
     const [activeDay, setActiveDay] = useState(1);
 
@@ -102,9 +103,9 @@ export const Chart: React.FC<ChartProps> = (props) => {
                     <View style={styles.boxTime}>
                         <Text style={styles.textTime}>13/06/2022 - 19/06/2022</Text>
                     </View>
-                // <View></View>
             }
 
+            <View style = {{borderWidth: 1}}>
             {
                 //đổ data vào list
                 listData.map((item, index) => {
@@ -168,6 +169,7 @@ export const Chart: React.FC<ChartProps> = (props) => {
                     )
                 })
             }
+            </View>
             {
                 //kiểm tra đã đăng nhập hay chưa
                 isLogin ?
@@ -177,11 +179,11 @@ export const Chart: React.FC<ChartProps> = (props) => {
                         </Text>
                         <View style={styles.boxMyrank}>
                             <View style={styles.left}>
-                                <Text style={styles.textRank}>#100</Text>
-                                <Image source={{ uri: IMAGE_AVATAR }} style={styles.imageUser} />
-                                <Text style={styles.textName}>John Wich</Text>
+                                <Text style={styles.textRank}>#{dataUser.rank}</Text>
+                                <Image source={{ uri: dataUser.avatar }} style={styles.imageUser} />
+                                <Text style={styles.textName}>{dataUser.name}</Text>
                             </View>
-                            <Text style={styles.textPoint}>100</Text>
+                            <Text style={styles.textPoint}>{dataUser.point}</Text>
                         </View>
                         {
                             where == 'home' ?
@@ -189,6 +191,7 @@ export const Chart: React.FC<ChartProps> = (props) => {
                                     containerStyle={styles.btnChart}
                                     title='Xem chi tiết'
                                     titleStyle={styles.textChart}
+                                    onPress={onPress}
                                 />
                                 :
                                 <View></View>
@@ -203,6 +206,7 @@ export const Chart: React.FC<ChartProps> = (props) => {
                             containerStyle={styles.btnChart}
                             title='Đăng nhập'
                             titleStyle={styles.textChart}
+                            onPress={onPress}
                         />
                     </View>
             }
@@ -215,7 +219,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: Colors.BLUE_KV,
-        marginTop: Dimensions.get('screen').height * 0.03
+        marginTop: Dimensions.get('screen').height * 0.1
     },
     boxTitle: {
         width: Dimensions.get('screen').width * 0.5,
@@ -244,13 +248,16 @@ const styles = StyleSheet.create({
     },
     listDay: {
         marginVertical: Dimensions.get('screen').height * 0.03,
+        borderWidth: 1,
+        borderColor: Colors.RED
     },
     itemDay: {
         borderWidth: 1,
         borderColor: Colors.WHITE,
         padding: Dimensions.get('screen').width * 0.02,
         borderRadius: 3,
-        marginEnd: Dimensions.get('screen').width * 0.05
+        marginEnd: Dimensions.get('screen').width * 0.05,
+        height: Dimensions.get('screen').height * 0.04
     },
     itemDayChoose: {
         borderWidth: 1,
@@ -259,18 +266,21 @@ const styles = StyleSheet.create({
         borderRadius: 3,
         marginEnd: Dimensions.get('screen').width * 0.05,
         backgroundColor: Colors.WHITE,
+        height: Dimensions.get('screen').height * 0.04
     },
     textDay: {
         fontSize: 14,
         fontWeight: '500',
         lineHeight: 16.8,
         color: Colors.WHITE,
+        borderWidth: 1
     },
     textDayChoose: {
         fontSize: 14,
         fontWeight: '500',
         lineHeight: 16.8,
         color: Colors.BLUE_KV,
+        borderWidth: 1
     },
     boxTime: {
         height: Dimensions.get('screen').height * 0.04,

@@ -21,7 +21,7 @@ const PureCoin : React.FC<HomeDrawerScreenProps<'PureCoin'>> = ({route, navigati
     };
 
     const goHome = () => {
-        console.log(123)
+        navigation.navigate('Home')
     };
 
     return (

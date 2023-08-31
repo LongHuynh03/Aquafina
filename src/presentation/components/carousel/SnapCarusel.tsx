@@ -8,6 +8,9 @@ import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
 import { firebaseConfig } from '../../../core';
 import Carousel, { Pagination } from 'react-native-snap-carousel';
+import { RootState, useAppDispatch } from '../../shared-state';
+import { useSelector } from 'react-redux';
+import { getGifts } from '../../shared-state/redux/reducers/GiftReducer';
 
 export const SLIDER_WIDTH = Dimensions.get("window").width + 20;
 export const ITEM_WIDTH = Math.round(SLIDER_WIDTH * 0.5);
@@ -19,36 +22,18 @@ interface CarouselProps {
 const SnapCarousel: React.FC<CarouselProps> = (props) => {
 
   const { isShowPagination } = props;
+  const dispatch = useAppDispatch();
 
   const [indexActive, setIndexActive] = useState(0);
-  const [listData, setListData] = useState<Gifts[]>([]);
   const isCarousel = useRef(null);
+
+  const listGift: Gifts[] = useSelector<RootState, Gifts[]>(
+    (state) => state.gift.list
+);
 
   useEffect(() => {
 
-    const getGifts = async () => {
-      const getGift = firebaseConfig.ref('/Gifts')
-        .once('value', (snapshot: any) => {
-          const list: Gifts[] = [];
-          snapshot.forEach((item: any) => {
-            if (item != null) {
-              const gift: Gifts = {
-                keyGift: "1"
-              }
-              gift.keyGift = item.key;
-              gift.Image = item.val().image;
-              gift.Name = item.val().name;
-              gift.Type = item.val().type;
-              gift.Use = item.val().use;
-              list.push(gift);
-              console.log(item.val().image);
-            }
-          })
-          setListData(list);
-        });
-    };
-
-    getGifts();
+    dispatch(getGifts())
 
     return () => { }
   }, [])
@@ -106,7 +91,7 @@ const SnapCarousel: React.FC<CarouselProps> = (props) => {
     <View style = {styles.box}>
       <Carousel
         ref={isCarousel}
-        data={listData}
+        data={listGift}
         //@ts-ignore
         renderItem={renderItem}
         sliderWidth={SLIDER_WIDTH}
@@ -127,7 +112,7 @@ const SnapCarousel: React.FC<CarouselProps> = (props) => {
                 <Text style= {styles.textButton}>Khám phá ngay</Text>
             </Pressable>
             <Pagination
-              dotsLength={listData.length}
+              dotsLength={listGift.length}
               activeDotIndex={indexActive}
               carouselRef={isCarousel}
               dotStyle={{

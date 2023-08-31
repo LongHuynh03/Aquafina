@@ -1,4 +1,4 @@
-import { StatusBar, Dimensions, ScrollView, Image, StyleSheet, Text, View } from 'react-native'
+import { Alert, Dimensions, Image, StyleSheet, Text, View } from 'react-native'
 import React, { useState } from 'react'
 import Header from '../../components/header/Header'
 import FoundationIcon from 'react-native-vector-icons/Foundation'
@@ -6,32 +6,68 @@ import { Colors } from '../../resource/values/colors'
 import { IMAGE_FOOTER_AUTHEN, IMAGE_TEXT_WELLCOME } from '../../../assets/images'
 import { TextField } from '../../components/textfield/TextField'
 import Button from '../../components/button/Button'
-import { AuthenStackScreenProps } from '../../navigations/stack/AuthenNavigation'
 import { HomeDrawerScreenProps } from '../../navigations/drawer/DrawerNavigation'
+import { Users } from '../../../domain'
+import { firebaseConfig } from '../../../core'
+import Background from '../../components/background/Background'
 
-    const Register : React.FC<HomeDrawerScreenProps<'Register'>> = ({route, navigation}) => {
+const Register: React.FC<HomeDrawerScreenProps<'Register'>> = ({ route, navigation }) => {
 
     const [phone, setPhone] = useState('');
+    const [name, setName] = useState('');
 
     const goHome = () => {
         navigation.navigate('Home')
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+        });
     };
 
-    const register = () => {
-        navigation.navigate('SendOTP', {
-            phone: phone
-        })
+    const register = async () => {
+        let list: Users[] = [];
+        try {
+            const user = await firebaseConfig.ref('Users')
+                .orderByChild('phone')
+                .equalTo(phone)
+                .limitToFirst(1)
+                .once('value', (value: any) => {
+                    value.forEach((item: any) => {
+                        if (item != undefined || item != null) {
+                            let get: Users = {
+                                keyUser: '',
+                                rank: 0,
+                            }
+                            list.push(get);
+                            Alert.alert("Tài khoản đã tồn tại");
+                        }
+                    })
+                });
+            if (list.length == 0) {
+                navigation.navigate('SendOTP', {
+                    phone: phone,
+                    name: name,
+                    type: 'register'
+                })
+                setPhone('');
+                setName('');
+            }
+        } catch (error) {
+            console.log(error);
+        }
     };
 
     return (
-        <ScrollView>
-            <StatusBar barStyle={'light-content'} translucent />
+        <Background
+            type='authen'
+        >
             <View style={styles.container}>
                 <Header
                     leftIcon={
                         <FoundationIcon name="home" size={30} color={Colors.GRAY_5} />
                     }
                     leftFocus={goHome}
+                    centerFocus={goHome}
                 />
                 <View style={styles.viewImge}>
                     <Image source={{ uri: IMAGE_TEXT_WELLCOME }} style={styles.imgWellcome} />
@@ -41,12 +77,15 @@ import { HomeDrawerScreenProps } from '../../navigations/drawer/DrawerNavigation
                     title='Họ và tên'
                     placeholder='Nhập họ và tên của bạn'
                     input={{
-                        onChangeText: (text) => { setPhone(text) }
+                        value: name,
+                        onChangeText: (text) => { setName(text) }
                     }} />
                 <TextField
                     title='Số điện thoại'
                     placeholder='Nhập số điện thoại của bạn'
                     input={{
+                        keyboardType: 'phone-pad',
+                        value: phone,
                         onChangeText: (text) => { setPhone(text) }
                     }} />
                 <View style={styles.footer}>
@@ -61,7 +100,8 @@ import { HomeDrawerScreenProps } from '../../navigations/drawer/DrawerNavigation
                     </View>
                 </View>
             </View>
-        </ScrollView>
+        </Background>
+
     )
 }
 

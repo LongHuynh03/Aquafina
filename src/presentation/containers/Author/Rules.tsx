@@ -33,7 +33,7 @@ const Rules : React.FC<HomeDrawerScreenProps<'Rules'>> = ({route, navigation}) =
   };
 
   const goHome = () => {
-    console.log(123)
+    navigation.navigate('Home')
   };
 
   return (

@@ -23,7 +23,7 @@ const PureGift: React.FC<HomeDrawerScreenProps<'PureGift'>> = ({route, navigatio
     };
 
     const goHome = () => {
-        console.log(123)
+        navigation.navigate('Home')
     };
 
     return (
