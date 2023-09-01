@@ -25,36 +25,42 @@ const Register: React.FC<HomeDrawerScreenProps<'Register'>> = ({ route, navigati
     };
 
     const register = async () => {
-        let list: Users[] = [];
-        try {
-            const user = await firebaseConfig.ref('Users')
-                .orderByChild('phone')
-                .equalTo(phone)
-                .limitToFirst(1)
-                .once('value', (value: any) => {
-                    value.forEach((item: any) => {
-                        if (item != undefined || item != null) {
-                            let get: Users = {
-                                keyUser: '',
-                                rank: 0,
-                            }
-                            list.push(get);
-                            Alert.alert("Tài khoản đã tồn tại");
-                        }
-                    })
-                });
-            if (list.length == 0) {
-                navigation.navigate('SendOTP', {
-                    phone: phone,
-                    name: name,
-                    type: 'register'
-                })
-                setPhone('');
-                setName('');
-            }
-        } catch (error) {
-            console.log(error);
+        if (phone.length != 10) {
+            Alert.alert('Số điện thoại không hợp lệ')
         }
+        else {
+            let list: Users[] = [];
+            try {
+                const user = await firebaseConfig.ref('Users')
+                    .orderByChild('phone')
+                    .equalTo(phone)
+                    .limitToFirst(1)
+                    .once('value', (value: any) => {
+                        value.forEach((item: any) => {
+                            if (item != undefined || item != null) {
+                                let get: Users = {
+                                    keyUser: '',
+                                    rank: 0,
+                                }
+                                list.push(get);
+                                Alert.alert("Tài khoản đã tồn tại");
+                            }
+                        })
+                    });
+                if (list.length == 0) {
+                    navigation.navigate('SendOTP', {
+                        phone: phone,
+                        name: name,
+                        type: 'register'
+                    })
+                    setPhone('');
+                    setName('');
+                }
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
     };
 
     return (
@@ -152,22 +158,9 @@ const styles = StyleSheet.create({
     },
     btnLogin: {
         backgroundColor: Colors.BLUE_500,
+        borderColor: Colors.BLUE_500
     },
     titleLogin: {
         color: Colors.WHITE,
     },
-    txtOr: {
-        textAlign: 'center',
-        fontSize: 11,
-        fontWeight: '500',
-        lineHeight: 13.2,
-        color: Colors.GRAY_5,
-        marginVertical: Dimensions.get('screen').height * 0.01,
-    },
-    btnRegister: {
-        backgroundColor: Colors.GRAY_1,
-    },
-    titleRegister: {
-        color: Colors.BLUE_KV,
-    }
 })

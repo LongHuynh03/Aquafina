@@ -3,13 +3,11 @@ import React from 'react'
 import RootNavigation from './src/presentation/navigations/RootNavigation'
 import { Provider } from 'react-redux'
 import { store } from './src/presentation/shared-state'
-import MainTest from './src/test/MainTest'
 
 const App = () => {
   return (
     <Provider store={store}>
       <RootNavigation />
-      {/* <MainTest/> */}
     </Provider>
 
   )

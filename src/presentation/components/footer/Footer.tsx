@@ -1,4 +1,4 @@
-import { Dimensions, Image, ImageBackground, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, Image, Pressable, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import React from 'react'
 import { ICON_FACEBOOK, ICON_YOUTUBE, IMAGE_FOOTER } from '../../../assets/images'
 import { Colors } from '../../resource/values/colors'
@@ -10,11 +10,12 @@ interface FooterProps {
     onPress_PureMap?: () => void,
     onPress_PureCoin?: () => void,
     onPress_PureChart?: () => void
+    onPressReport?: () => void,
 }
 
-const Footer:React.FC<FooterProps> = (props) => {
+const Footer: React.FC<FooterProps> = (props) => {
 
-    const { onPress_PureWorld, onPress_PureGift, onPress_PureMap, onPress_PureCoin, onPress_PureChart } = props
+    const { onPress_PureWorld, onPress_PureGift, onPress_PureMap, onPress_PureCoin, onPress_PureChart, onPressReport } = props
 
     return (
         <View style={styles.footerContainer} >
@@ -25,7 +26,7 @@ const Footer:React.FC<FooterProps> = (props) => {
                 </TouchableOpacity>
             </View>
             <View style={styles.viewOnPress}>
-                <TouchableOpacity style={styles.btnOnPress} onPress={onPress_PureGift   }>
+                <TouchableOpacity style={styles.btnOnPress} onPress={onPress_PureGift}>
                     <Text style={styles.txtBtn}>Quà Tặng Xanh</Text>
                 </TouchableOpacity>
             </View>
@@ -59,7 +60,9 @@ const Footer:React.FC<FooterProps> = (props) => {
             </View>
             <View style={styles.boxError}>
                 <MaterialIcon name='report-gmailerrorred' size={30} color={Colors.RED} />
-                <Text style={styles.txtError}>Báo Lỗi</Text>
+                <Pressable onPress={onPressReport}>
+                    <Text style={styles.txtError}>Báo Lỗi</Text>
+                </Pressable>
             </View>
             <Text style={styles.txtAuthor}>Copyright © 2022 Aquafina Vietnam</Text>
         </View>

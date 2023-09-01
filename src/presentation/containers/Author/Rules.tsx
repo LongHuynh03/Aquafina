@@ -10,16 +10,17 @@ import { getQuantityGift } from '../../shared-state/redux/reducers/QuantityGift'
 import Button from '../../components/button/Button'
 import Footer from '../../components/footer/Footer'
 import { HomeDrawerScreenProps } from '../../navigations/drawer/DrawerNavigation'
-import Dialog from '../../components/dialog/Dialog'
+import { DialogLogIn, DialogLogOut } from '../../components/dialog/Dialog'
 
 const Rules: React.FC<HomeDrawerScreenProps<'Rules'>> = ({ route, navigation }) => {
 
   const dispatch = useAppDispatch();
-  const [showPopupLogOut, setShowPopupLogOut] = useState(false)
+  const [showPopupLogOut, setShowPopupLogOut] = useState(false);
+  const [showPopupLogIn, setShowPopupLogIn] = useState(false);
 
   const isLogin: boolean = useSelector<RootState, boolean>(
     (state) => state.user.isLogin
-)
+  )
 
   useEffect(() => {
     dispatch(getQuantityGift());
@@ -36,7 +37,11 @@ const Rules: React.FC<HomeDrawerScreenProps<'Rules'>> = ({ route, navigation }) 
 
   const logOut = () => {
     dispatch(signOut());
-    navigation.navigate('LogIn')
+    navigation.navigate('Home');
+    navigation.reset({
+      index: 0,
+      routes: [{ name: 'Home' }],
+    });
   };
 
   const goHome = () => {
@@ -44,20 +49,31 @@ const Rules: React.FC<HomeDrawerScreenProps<'Rules'>> = ({ route, navigation }) 
   };
 
   const goChart = () => {
-    navigation.navigate('PureChart')
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'PureChart' }],
-    });
+    if (isLogin) {
+      navigation.navigate('PureChart')
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'PureChart' }],
+      });
+    }
+    else {
+      setShowPopupLogIn(true);
+    }
   }
 
   const goCoin = () => {
-    navigation.navigate('PureCoin')
-    navigation.reset({
-      index: 0,
-      routes: [{ name: 'PureCoin' }],
-    });
+    if (isLogin) {
+      navigation.navigate('PureCoin')
+      navigation.reset({
+        index: 0,
+        routes: [{ name: 'PureCoin' }],
+      });
+    }
+    else {
+      setShowPopupLogIn(true);
+    }
   }
+
   const goGift = () => {
     navigation.navigate('PureGift')
     navigation.reset({
@@ -85,7 +101,7 @@ const Rules: React.FC<HomeDrawerScreenProps<'Rules'>> = ({ route, navigation }) 
       type='home'
       centerFocus={goHome}
       leftFocus={menu}
-      rightFocus={isLogin ? () => setShowPopupLogOut(true) : logOut}
+      rightFocus={isLogin ? () => setShowPopupLogOut(true) : () => navigation.navigate('LogIn')}
     >
       <Image source={{ uri: IMAGE_RIPPLE_RULES }} style={styles.imageBackground} />
       <View style={styles.container}>
@@ -379,13 +395,26 @@ const Rules: React.FC<HomeDrawerScreenProps<'Rules'>> = ({ route, navigation }) 
           onPress_PureGift={goGift}
           onPress_PureMap={goMap}
           onPress_PureWorld={goWorld}
+          onPressReport={() => navigation.navigate('ReportError')}
         />
       </View>
-      <Dialog
-                isVisible={showPopupLogOut}
-                onPressCancel={() => setShowPopupLogOut(false)}
-                onPressLogout={logOut}
-            />
+      <DialogLogOut
+        isVisible={showPopupLogOut}
+        onPressCancel={() => setShowPopupLogOut(false)}
+        onPressLogout={logOut}
+      />
+      <DialogLogIn
+        isVisible={showPopupLogIn}
+        onPressCancel={() => setShowPopupLogIn(false)}
+        onPressLogIn={() => {
+          setShowPopupLogIn(false);
+          navigation.navigate('LogIn');
+          navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+          });
+        }}
+      />
     </Background>
   )
 }
@@ -490,7 +519,8 @@ const styles = StyleSheet.create({
     width: Dimensions.get('screen').width * 0.3,
     backgroundColor: Colors.BLUE,
     height: Dimensions.get('screen').height * 0.05,
-    marginVertical: Dimensions.get('screen').height * 0.03
+    marginVertical: Dimensions.get('screen').height * 0.03,
+    borderColor: Colors.BLUE
   },
   titleButton: {
     color: Colors.WHITE

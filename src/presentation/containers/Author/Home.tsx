@@ -14,7 +14,7 @@ import { Chart } from '../../components'
 import { Users } from '../../../domain'
 import Footer from '../../components/footer/Footer'
 import { HomeDrawerScreenProps } from '../../navigations/drawer/DrawerNavigation'
-import Dialog from '../../components/dialog/Dialog'
+import { DialogLogIn, DialogLogOut } from '../../components/dialog/Dialog'
 
 const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) => {
 
@@ -25,7 +25,8 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) =>
     )
 
     const [showPopupHappy, setShowPopupHappy] = useState(isLogin);
-    const [showPopupLogOut, setShowPopupLogOut] = useState(false)
+    const [showPopupLogOut, setShowPopupLogOut] = useState(false);
+    const [showPopupLogIn, setShowPopupLogIn] = useState(false);
 
     const listBanner: Banners[] = useSelector<RootState, Banners[]>(
         (state) => state.banner.banners
@@ -57,30 +58,41 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) =>
     }
 
     const logOut = () => {
-        navigation.navigate('LogIn')
         dispatch(signOut());
+        navigation.navigate('Home');
         navigation.reset({
             index: 0,
-            routes: [{ name: 'LogIn' }],
+            routes: [{ name: 'Home' }],
         });
     };
 
 
     const goChart = () => {
-        navigation.navigate('PureChart')
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'PureChart' }],
-        });
+        if (isLogin) {
+            navigation.navigate('PureChart')
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'PureChart' }],
+            });
+        }
+        else {
+            setShowPopupLogIn(true);
+        }
     }
 
     const goCoin = () => {
-        navigation.navigate('PureCoin')
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'PureCoin' }],
-        });
+        if (isLogin) {
+            navigation.navigate('PureCoin')
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'PureCoin' }],
+            });
+        }
+        else{
+            setShowPopupLogIn(true);
+        }
     }
+    
     const goGift = () => {
         navigation.navigate('PureGift')
         navigation.reset({
@@ -108,7 +120,7 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) =>
         <Background
             type='home'
             leftFocus={menu}
-            rightFocus={isLogin ? () => setShowPopupLogOut(true) : logOut}
+            rightFocus={isLogin ? () => setShowPopupLogOut(true) : () => navigation.navigate('LogIn')}
         >
             <View style={styles.container}>
                 <View style={styles.boxbanner}>
@@ -130,7 +142,8 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) =>
                     <Button
                         containerStyle={styles.buttonBanner}
                         title='Tìm hiểu thêm'
-                        titleStyle={styles.textBanner} />
+                        titleStyle={styles.textBanner}
+                        onPress={()=> navigation.navigate('PureWorld')} />
                 </View>
                 <View style={styles.boxSumBottle}>
                     {/* <Image source={{ uri: IMAGE_STROKE_AQUFINA_TOP }} style={styles.imageStrokeAqua} /> */}
@@ -141,7 +154,7 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) =>
                     listData={listUsers.slice(0, 5)}
                     dataUser={user}
                     where='home'
-                    onPress={isLogin ? goChart : logOut}
+                    onPress={isLogin ? goChart : () => navigation.navigate('LogIn')}
                 />
                 <View style={styles.boxGift} >
                     <Image source={{ uri: IMAGE_BG_BG_COIN }} style={styles.imageBGBG} />
@@ -154,7 +167,7 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) =>
 
                     <SnapCarousel
                         isShowPagination='flex'
-                        
+                        onPress={()=> navigation.navigate('PureGift')}
                     />
                 </View>
                 <View style={styles.boxMap}>
@@ -162,7 +175,8 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) =>
                     <Button
                         containerStyle={[styles.buttonBanner, { bottom: Dimensions.get('screen').height * 0.02 }]}
                         title='Khám phá ngay'
-                        titleStyle={styles.textBanner} />
+                        titleStyle={styles.textBanner} 
+                        onPress={()=> navigation.navigate('PureMap')}/>
                 </View>
                 <Footer
                     onPress_PureChart={goChart}
@@ -170,6 +184,7 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) =>
                     onPress_PureGift={goGift}
                     onPress_PureMap={goMap}
                     onPress_PureWorld={goWorld}
+                    onPressReport={() => navigation.navigate('ReportError')}
                 />
             </View>
 
@@ -184,10 +199,23 @@ const Home: React.FC<HomeDrawerScreenProps<'Home'>> = ({ route, navigation }) =>
                 </View>
             </Modal>
 
-            <Dialog
+            <DialogLogOut
                 isVisible={showPopupLogOut}
                 onPressCancel={() => setShowPopupLogOut(false)}
                 onPressLogout={logOut}
+            />
+
+            <DialogLogIn
+                isVisible={showPopupLogIn}
+                onPressCancel={() => setShowPopupLogIn(false)}
+                onPressLogIn={() => {
+                    setShowPopupLogIn(false);
+                    navigation.navigate('LogIn');
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'Home' }],
+                    });
+                }}
             />
         </Background>
     )
@@ -217,6 +245,7 @@ const styles = StyleSheet.create({
         height: Dimensions.get('screen').height * 0.05,
         backgroundColor: Colors.BLUE_500,
         bottom: Dimensions.get('screen').height * 0.06,
+        borderColor: Colors.BLUE_500,
     },
     textBanner: {
         fontSize: 14,

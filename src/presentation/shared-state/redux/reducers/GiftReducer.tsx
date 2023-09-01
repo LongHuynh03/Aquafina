@@ -19,6 +19,7 @@ export const getGifts = createAsyncThunk(
                         gift.Name = item.val().name;
                         gift.Type = item.val().type;
                         gift.Use = item.val().use;
+                        gift.Detail = item.val().detail;
                         list.push(gift);
                     });
                 })

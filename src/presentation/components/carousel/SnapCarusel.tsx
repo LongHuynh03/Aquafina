@@ -1,12 +1,12 @@
-import { StyleSheet, Text, View, Pressable, Image, Dimensions } from 'react-native'
+import { StyleSheet, Text, View, Pressable, Image, Dimensions, Modal } from 'react-native'
 import React, { useMemo, useState, useRef, useEffect } from 'react'
 import { Gifts } from '../../../domain';
 import { Colors } from '../../resource';
-import { ICON_BOTTLE, IMAGE_BG_ITEM_GIFT } from '../../../assets';
+import { IMAGE_BG_GIFT, IMAGE_BG_ITEM_GIFT, IMAGE_BOTTLE_AQUAFINA, IMAGE_FOOTER, IMAGE_RIPPLE_RING } from '../../../assets';
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import SimpleLineIcon from 'react-native-vector-icons/SimpleLineIcons'
 import FontAwesome6Icon from 'react-native-vector-icons/FontAwesome6'
-import { firebaseConfig } from '../../../core';
+import FeatherIcon from 'react-native-vector-icons/Feather'
 import Carousel, { Pagination } from 'react-native-snap-carousel';
 import { RootState, useAppDispatch } from '../../shared-state';
 import { useSelector } from 'react-redux';
@@ -26,18 +26,27 @@ const SnapCarousel: React.FC<CarouselProps> = (props) => {
   const dispatch = useAppDispatch();
 
   const [indexActive, setIndexActive] = useState(0);
+  const [showItem, setShowItem] = useState(false);
   const isCarousel = useRef(null);
 
   const listGift: Gifts[] = useSelector<RootState, Gifts[]>(
     (state) => state.gift.list
-);
+  );
+
+  const [giftActive, setgiftActive] = useState<Gifts>({
+    keyGift: '1',
+    Detail: IMAGE_BOTTLE_AQUAFINA,
+    Name: 'Product',
+    Type: 1,
+    Use: 1,
+  });
 
   useEffect(() => {
 
     dispatch(getGifts())
 
     return () => { }
-  }, [])
+  }, []);
 
 
   const renderItem = useMemo(() =>
@@ -51,7 +60,8 @@ const SnapCarousel: React.FC<CarouselProps> = (props) => {
             {
               backgroundColor: isActive ? Colors.BLUE_400 : Colors.WHITE,
             },
-          ]}>
+          ]}
+          onPress={() => { setgiftActive(item); setShowItem(true) }}>
           <Image source={{ uri: IMAGE_BG_ITEM_GIFT }} style={styles.styleImagePresentItem} />
           <Image source={{ uri: item.Image }}
             style={[
@@ -74,7 +84,7 @@ const SnapCarousel: React.FC<CarouselProps> = (props) => {
                 <SimpleLineIcon name='bag' color={colorActive} size={20} />
                 : <IonIcon name='shirt-outline' color={colorActive} size={20} />
             }
-            <Text style={[styles.textIcon, {color: colorActive}]}> {'~'} {item.Use} </Text>
+            <Text style={[styles.textIcon, { color: colorActive }]}> {'~'} {item.Use} </Text>
             <FontAwesome6Icon name='bottle-water' color={colorActive} size={20} />
           </View>
           <Text style={
@@ -89,7 +99,7 @@ const SnapCarousel: React.FC<CarouselProps> = (props) => {
   );
 
   return (
-    <View style = {styles.box}>
+    <View style={styles.box}>
       <Carousel
         ref={isCarousel}
         data={listGift}
@@ -104,13 +114,13 @@ const SnapCarousel: React.FC<CarouselProps> = (props) => {
         initialNumToRender={3}
         inactiveSlideOpacity={1}
         inactiveSlideScale={0.7}
-        style = {{height: 1000}}
+        style={{ height: 1000 }}
       />
       {
         isShowPagination == 'flex' ?
-          <View style = {styles.boxButton}>
-            <Pressable style= {styles.button} onPress={onPress}>
-                <Text style= {styles.textButton}>Khám phá ngay</Text>
+          <View style={styles.boxButton}>
+            <Pressable style={styles.button} onPress={onPress}>
+              <Text style={styles.textButton}>Khám phá ngay</Text>
             </Pressable>
             <Pagination
               dotsLength={listGift.length}
@@ -132,9 +142,34 @@ const SnapCarousel: React.FC<CarouselProps> = (props) => {
           </View>
           : <View></View>
       }
-
+      <Modal
+        animationType="slide"
+        transparent={true}
+        visible={showItem}>
+        <View style={styles.modalItem}>
+          <View style={styles.boxModal}>
+            <View style={styles.header}>
+              <Pressable onPress={() => setShowItem(false)}>
+                <FeatherIcon name='x' color={Colors.GRAY_5} size={24} />
+              </Pressable>
+            </View>
+            <View style={styles.content}>
+              <Image source={{ uri: IMAGE_FOOTER }} style={styles.imageModal} />
+              <Text style={styles.textTitle}>QUÀ TẶNG ĐƯỢC LÀM TỪ</Text>
+              <Text style={styles.textTitle}>VẢI TÁI CHẾ CỦA AQUAFINA</Text>
+              <Image source={{ uri: giftActive.Detail }} style={styles.imageDetail} />
+              <Text style={[styles.textName, { marginTop: 15, }]}>{giftActive.Name}</Text>
+              <Text style={styles.textName}>Aquafina x Headless</Text>
+              <Text style={styles.textDes}>1 {
+                giftActive.Type == 1 ? 'Áo' :
+                  giftActive.Type == 2 ? 'Vớ' :
+                    giftActive.Type == 3 ? 'Túi' : 'Nón'
+              } được làm từ {giftActive.Use} chai nhựa</Text>
+            </View>
+          </View>
+        </View>
+      </Modal>
     </View>
-
   )
 }
 
@@ -231,5 +266,62 @@ const styles = StyleSheet.create({
     fontWeight: '500',
     lineHeight: 16.8,
     color: Colors.WHITE,
+  },
+  modalItem: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  boxModal: {
+    width: Dimensions.get('screen').width * 0.8,
+    height: Dimensions.get('screen').height * 0.55,
+    backgroundColor: Colors.WHITE,
+    borderRadius: 10,
+    padding: 10,
+    alignItems: 'center',
+  },
+  header: {
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    width: '100%',
+    height: '6%',
+  },
+  content: {
+    width: '100%',
+    height: '94%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imageModal: {
+    resizeMode: 'contain',
+    position: 'absolute',
+    width: Dimensions.get('screen').width * 0.8,
+    height: Dimensions.get('screen').height * 0.4,
+  },
+  textTitle: {
+    fontSize: 14,
+    fontWeight: '500',
+    lineHeight: 16.8,
+    color: Colors.BLUE_KV,
+  },
+  imageDetail: {
+    resizeMode: 'contain',
+    width: Dimensions.get('screen').width * 0.8,
+    height: Dimensions.get('screen').height * 0.3,
+    marginTop: 15,
+  },
+  textName: {
+    fontSize: 18,
+    fontWeight: '700',
+    lineHeight: 21.6,
+    color: Colors.BLUE_KV,
+  },
+  textDes: {
+    fontSize: 14,
+    fontWeight: '400',
+    lineHeight: 16.8,
+    color: Colors.BLUE_KV,
+    marginTop: 15,
   },
 })

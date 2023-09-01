@@ -1,5 +1,5 @@
 import { View, Text, StatusBar, Dimensions, Pressable, Image, StyleSheet } from 'react-native'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { createDrawerNavigator, DrawerItem, DrawerContentScrollView } from '@react-navigation/drawer';
 import Home from '../../containers/Author/Home';
 import PureGift from '../../containers/Author/PureGift';
@@ -19,7 +19,8 @@ import Rules from '../../containers/Author/Rules';
 import { RootState, signOut, useAppDispatch } from '../../shared-state';
 import { useSelector } from 'react-redux';
 import { Users } from '../../../domain';
-import Dialog from '../../components/dialog/Dialog';
+import ReportError from '../../containers/Author/ReportError';
+import { DialogLogIn, DialogLogOut } from '../../components/dialog/Dialog';
 
 const filterDrawer = [
     "Thế Giới Xanh",
@@ -42,7 +43,8 @@ const DrawerNavigator = () => {
         (state) => state.user.isLogin
     )
 
-    const [showPopupLogOut, setShowPopupLogOut] = useState(false)
+    const [showPopupLogOut, setShowPopupLogOut] = useState(false);
+    const [showPopupLogIn, setShowPopupLogIn] = useState(false);
 
     return (
         <Drawer.Navigator
@@ -121,7 +123,14 @@ const DrawerNavigator = () => {
                                         fontSize: 16,
                                         marginStart: -20,
                                     }}
-                                    onPress={() => props.navigation.navigate(props.state.routeNames[index])}
+                                    onPress={() => {
+                                        if (isLogin) {
+                                            props.navigation.navigate(props.state.routeNames[index]);
+                                        }
+                                        else {
+                                            setShowPopupLogIn(true);
+                                        }
+                                    }}
                                     // onPress={() => console.log(props.state.routeNames[index+1])}
                                     icon={({ focused }) => {
                                         let icon;
@@ -156,7 +165,15 @@ const DrawerNavigator = () => {
 
                     </DrawerContentScrollView>
                     <Pressable
-                        onPress={() => { isLogin ? setShowPopupLogOut(true) : props.navigation.navigate('LogIn'); dispatch(signOut()) }}
+                        onPress={isLogin ? () => setShowPopupLogOut(true) :
+                            () => {
+                                props.navigation.navigate('LogIn');
+                                props.navigation.reset({
+                                    index: 0,
+                                    routes: [{ name: 'LogIn' }],
+                                });
+                            }
+                        }
                         style={{
                             position: 'absolute',
                             bottom: 0,
@@ -183,10 +200,30 @@ const DrawerNavigator = () => {
                                 isLogin ? 'Sign out' : 'Sign in'
                             }</Text>
                     </Pressable>
-                    <Dialog
+                    <DialogLogOut
                         isVisible={showPopupLogOut}
                         onPressCancel={() => setShowPopupLogOut(false)}
-                        onPressLogout={() => { props.navigation.navigate('LogIn'); dispatch(signOut()); setShowPopupLogOut(false);}}
+                        onPressLogout={() => {
+                            props.navigation.navigate('Home');
+                            props.navigation.reset({
+                                index: 0,
+                                routes: [{ name: 'Home' }],
+                            });
+                            dispatch(signOut());
+                            setShowPopupLogOut(false);
+                        }}
+                    />
+                    <DialogLogIn
+                        isVisible={showPopupLogIn}
+                        onPressCancel={() => setShowPopupLogIn(false)}
+                        onPressLogIn={() => {
+                            setShowPopupLogIn(false);
+                            props.navigation.navigate('LogIn');
+                            props.navigation.reset({
+                                index: 0,
+                                routes: [{ name: 'LogIn' }],
+                            });
+                        }}
                     />
                 </View>
             )}>
@@ -201,6 +238,7 @@ const DrawerNavigator = () => {
             <Drawer.Screen name="Register" component={Register} />
             <Drawer.Screen name="SendOTP" component={SendOTP} />
             <Drawer.Screen name="Rules" component={Rules} />
+            <Drawer.Screen name="ReportError" component={ReportError} />
         </Drawer.Navigator>
     )
 }

@@ -177,13 +177,13 @@ export const Chart: React.FC<ChartProps> = (props) => {
                         <Text style={styles.textHangCuaToi}>
                             Hạng của tôi
                         </Text>
-                        <View style={styles.boxMyrank}>
+                        <View style={styles.boxYourRank}>
                             <View style={styles.left}>
-                                <Text style={styles.textRank}>#{dataUser.rank}</Text>
-                                <Image source={{ uri: dataUser.avatar }} style={styles.imageUser} />
-                                <Text style={styles.textName}>{dataUser.name}</Text>
+                                <Text style={[styles.textRank, {color: Colors.WHITE}]}>#{dataUser.rank}</Text>
+                                <Image source={{ uri: dataUser.avatar }} style={[styles.imageUser]} />
+                                <Text style={[styles.textName,{color: Colors.WHITE}]}>{dataUser.name}</Text>
                             </View>
-                            <Text style={styles.textPoint}>{dataUser.point}</Text>
+                            <Text style={[styles.textPoint,{color: Colors.WHITE}]}>{dataUser.point}</Text>
                         </View>
                         {
                             where == 'home' ?
@@ -216,10 +216,11 @@ export const Chart: React.FC<ChartProps> = (props) => {
 
 const styles = StyleSheet.create({
     boxChart: {
+        width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: Colors.BLUE_KV,
-        marginTop: Dimensions.get('screen').height * 0.1
+        marginTop: Dimensions.get('screen').height * 0.05
     },
     boxTitle: {
         width: Dimensions.get('screen').width * 0.5,
@@ -272,14 +273,12 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         lineHeight: 16.8,
         color: Colors.WHITE,
-        borderWidth: 1
     },
     textDayChoose: {
         fontSize: 14,
         fontWeight: '500',
         lineHeight: 16.8,
         color: Colors.BLUE_KV,
-        borderWidth: 1
     },
     boxTime: {
         height: Dimensions.get('screen').height * 0.04,
@@ -304,6 +303,15 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         backgroundColor: Colors.WHITE,
+        borderRadius: 6,
+        padding: Dimensions.get('screen').width * 0.02,
+        margin: Dimensions.get('screen').height * 0.005
+    },
+    boxYourRank: {
+        width: Dimensions.get('screen').width * 0.8,
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        backgroundColor: Colors.WHITE_20,
         borderRadius: 6,
         padding: Dimensions.get('screen').width * 0.02,
         margin: Dimensions.get('screen').height * 0.005
@@ -432,7 +440,9 @@ const styles = StyleSheet.create({
         width: Dimensions.get('screen').width * 0.8,
         height: Dimensions.get('screen').height * 0.05,
         backgroundColor: Colors.GRAY_1,
-        margin: Dimensions.get('screen').height * 0.02
+        margin: Dimensions.get('screen').height * 0.02,
+        borderColor: Colors.GRAY_1,
+
     },
     textChart: {
         color: Colors.BLUE_KV,

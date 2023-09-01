@@ -50,7 +50,7 @@ export const signUp = createAsyncThunk(
                 phone: data.phone,
                 avatar: IMAGE_AVATAR,
                 point: 0,
-                rank: 0,
+                rank: 999,
             }
             const addUser = firebaseConfig.ref('/Users').push();
             await addUser.set(newUser);

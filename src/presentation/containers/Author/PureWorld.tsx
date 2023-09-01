@@ -1,5 +1,5 @@
 import { Dimensions, StyleSheet, Text, View, ImageBackground } from 'react-native'
-import React, {useState} from 'react'
+import React, { useState } from 'react'
 import { Image } from 'react-native'
 import { IMAGE_BG_ITEM_CYCLE, IMAGE_BOTTLE_AQUAFINA, IMAGE_LIFE_CYCLE, IMAGE_RIPPLE_RING, IMAGE_TEXT_JOINTHERIPPLE, IMAGE_TEXT_LANTOAPHONGCACH, IMAGE_THUNG_CHUA } from '../../../assets/images'
 import { Colors } from '../../resource/values/colors'
@@ -8,13 +8,14 @@ import LinearGradient from 'react-native-linear-gradient'
 import Background from '../../components/background/Background'
 import { HomeDrawerScreenProps } from '../../navigations/drawer/DrawerNavigation'
 import { RootState, signOut, useAppDispatch } from '../../shared-state'
-import Dialog from '../../components/dialog/Dialog'
 import { useSelector } from 'react-redux'
+import { DialogLogIn, DialogLogOut } from '../../components/dialog/Dialog'
 
-const PureWorld : React.FC<HomeDrawerScreenProps<'PureWorld'>> = ({route, navigation}) => {
+const PureWorld: React.FC<HomeDrawerScreenProps<'PureWorld'>> = ({ route, navigation }) => {
 
     const dispatch = useAppDispatch();
-    const [showPopupLogOut, setShowPopupLogOut] = useState(false)
+    const [showPopupLogOut, setShowPopupLogOut] = useState(false);
+    const [showPopupLogIn, setShowPopupLogIn] = useState(false);
 
     const isLogin: boolean = useSelector<RootState, boolean>(
         (state) => state.user.isLogin
@@ -26,7 +27,11 @@ const PureWorld : React.FC<HomeDrawerScreenProps<'PureWorld'>> = ({route, naviga
 
     const logOut = () => {
         dispatch(signOut());
-        navigation.navigate('LogIn')
+        navigation.navigate('Home');
+        navigation.reset({
+            index: 0,
+            routes: [{ name: 'Home' }],
+        });
     };
 
     const goHome = () => {
@@ -34,35 +39,46 @@ const PureWorld : React.FC<HomeDrawerScreenProps<'PureWorld'>> = ({route, naviga
     };
 
     const goChart = () => {
-        navigation.navigate('PureChart')
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'PureChart' }],
-        });
+        if (isLogin) {
+            navigation.navigate('PureChart')
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'PureChart' }],
+            });
+        }
+        else {
+            setShowPopupLogIn(true);
+        }
     }
 
-    const goCoin= () => {
-        navigation.navigate('PureCoin')
-        navigation.reset({
-            index: 0,
-            routes: [{ name: 'PureCoin' }],
-        });
+    const goCoin = () => {
+        if (isLogin) {
+            navigation.navigate('PureCoin')
+            navigation.reset({
+                index: 0,
+                routes: [{ name: 'PureCoin' }],
+            });
+        }
+        else{
+            setShowPopupLogIn(true);
+        }
     }
-    const goGift= () => {
+    
+    const goGift = () => {
         navigation.navigate('PureGift')
         navigation.reset({
             index: 0,
             routes: [{ name: 'PureGift' }],
         });
     }
-    const goMap= () => {
+    const goMap = () => {
         navigation.navigate('PureMap')
         navigation.reset({
             index: 0,
             routes: [{ name: 'PureMap' }],
         });
     }
-    const goWorld= () => {
+    const goWorld = () => {
         navigation.navigate('PureWorld')
         navigation.reset({
             index: 0,
@@ -75,7 +91,7 @@ const PureWorld : React.FC<HomeDrawerScreenProps<'PureWorld'>> = ({route, naviga
             type='home'
             centerFocus={goHome}
             leftFocus={menu}
-            rightFocus={isLogin ? () => setShowPopupLogOut(true) : logOut}
+            rightFocus={isLogin ? () => setShowPopupLogOut(true) : () => navigation.navigate('LogIn')}
         >
             <View style={styles.container}>
                 <View style={styles.boxBanner}>
@@ -172,17 +188,30 @@ const PureWorld : React.FC<HomeDrawerScreenProps<'PureWorld'>> = ({route, naviga
                     </View>
                 </LinearGradient>
                 <Footer
-                onPress_PureChart={goChart}
-                onPress_PureCoin={goCoin}
-                onPress_PureGift={goGift}
-                onPress_PureMap={goMap}
-                onPress_PureWorld={goWorld}
+                    onPress_PureChart={goChart}
+                    onPress_PureCoin={goCoin}
+                    onPress_PureGift={goGift}
+                    onPress_PureMap={goMap}
+                    onPress_PureWorld={goWorld}
+                    onPressReport={() => navigation.navigate('ReportError')}
                 />
             </View>
-            <Dialog
+            <DialogLogOut
                 isVisible={showPopupLogOut}
                 onPressCancel={() => setShowPopupLogOut(false)}
                 onPressLogout={logOut}
+            />
+            <DialogLogIn
+                isVisible={showPopupLogIn}
+                onPressCancel={() => setShowPopupLogIn(false)}
+                onPressLogIn={() => {
+                    setShowPopupLogIn(false);
+                    navigation.navigate('LogIn');
+                    navigation.reset({
+                        index: 0,
+                        routes: [{ name: 'Home' }],
+                    });
+                }}
             />
         </Background>
     )

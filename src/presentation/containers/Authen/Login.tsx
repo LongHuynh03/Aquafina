@@ -17,8 +17,8 @@ const Login: React.FC<HomeDrawerScreenProps<'LogIn'>> = ({ route, navigation }) 
 
     const [phone, setPhone] = useState('');
     const isLogin: boolean = useSelector<RootState, boolean>(
-            (state) => state.user.isLogin
-        )
+        (state) => state.user.isLogin
+    )
 
     const goHome = () => {
         navigation.navigate('Home')
@@ -30,36 +30,42 @@ const Login: React.FC<HomeDrawerScreenProps<'LogIn'>> = ({ route, navigation }) 
 
     useEffect(() => {
         console.log(isLogin)
-      return () => {}
+        return () => { }
     }, [])
-    
+
 
     const logIn = async () => {
-        let list: Users[] = [];
-        try {
-            const user = await firebaseConfig.ref('Users')
-                .orderByChild('phone')
-                .equalTo(phone)
-                .limitToFirst(1)
-                .once('value', (value: any) => {
-                    value.forEach((item: any) => {
-                        if (item != undefined || item != null) {
-                            list.push(item);
-                            navigation.navigate('SendOTP', {
-                                phone: phone,
-                                type: 'login'
-                            });
-                            setPhone('');
-                        }
-                    })
-                }).then(() => {
-                    if (list.length == 0) {
-                        Alert.alert("Tài khoản không tồn tại");
-                    }
-                });
-        } catch (error) {
-            console.log(error);
+        if (phone.length != 10) {
+            Alert.alert('Số điện thoại không hợp lệ')
         }
+        else {
+            let list: Users[] = [];
+            try {
+                const user = await firebaseConfig.ref('Users')
+                    .orderByChild('phone')
+                    .equalTo(phone)
+                    .limitToFirst(1)
+                    .once('value', (value: any) => {
+                        value.forEach((item: any) => {
+                            if (item != undefined || item != null) {
+                                list.push(item);
+                                navigation.navigate('SendOTP', {
+                                    phone: phone,
+                                    type: 'login'
+                                });
+                                setPhone('');
+                            }
+                        })
+                    }).then(() => {
+                        if (list.length == 0) {
+                            Alert.alert("Tài khoản không tồn tại");
+                        }
+                    });
+            } catch (error) {
+                console.log(error);
+            }
+        }
+
     };
 
     const register = () => {
@@ -165,6 +171,7 @@ const styles = StyleSheet.create({
     },
     btnLogin: {
         backgroundColor: Colors.BLUE_500,
+        borderColor: Colors.BLUE_500
     },
     titleLogin: {
         color: Colors.WHITE,
@@ -179,6 +186,7 @@ const styles = StyleSheet.create({
     },
     btnRegister: {
         backgroundColor: Colors.GRAY_1,
+        borderColor: Colors.GRAY_1
     },
     titleRegister: {
         color: Colors.BLUE_KV,

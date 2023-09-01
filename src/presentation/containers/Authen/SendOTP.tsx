@@ -71,16 +71,27 @@ const SendOTP: React.FC<HomeDrawerScreenProps<'SendOTP'>> = ({ route, navigation
             if (type == 'login') {
                 dispatch(signIn(data))
                 navigation.navigate('Home');
+                resetForm();
             }
             else {
                 dispatch(signUp(data))
                 setIsRegister(true);
+                resetForm();
             }
         }
         else {
             Alert.alert("Mã OTP không đúng");
+            setFalseOTP(true);
+            resetForm();
         }
     };
+
+    const resetForm = () => {
+        setCode_1('');
+        setCode_2('');
+        setCode_3('');
+        setCode_4('');
+    }
 
     return (
         <Background
@@ -106,21 +117,25 @@ const SendOTP: React.FC<HomeDrawerScreenProps<'SendOTP'>> = ({ route, navigation
                                 phone={phone}
                                 status={falseOTP}
                                 inputProps_1={{
+                                    onFocus: () => {setFalseOTP(false)},
                                     keyboardType: 'phone-pad',
                                     value: code_1,
                                     onChangeText: (text) => { setCode_1(text) }
                                 }}
                                 inputProps_2={{
+                                    onFocus: () => {setFalseOTP(false)},
                                     keyboardType: 'phone-pad',
                                     value: code_2,
                                     onChangeText: (text) => { setCode_2(text) }
                                 }}
                                 inputProps_3={{
+                                    onFocus: () => {setFalseOTP(false)},
                                     keyboardType: 'phone-pad',
                                     value: code_3,
                                     onChangeText: (text) => { setCode_3(text) }
                                 }}
                                 inputProps_4={{
+                                    onFocus: () => {setFalseOTP(false)},
                                     keyboardType: 'phone-pad',
                                     value: code_4,
                                     onChangeText: (text) => { setCode_4(text) }

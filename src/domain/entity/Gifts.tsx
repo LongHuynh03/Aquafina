@@ -4,4 +4,5 @@ export interface Gifts {
     Name?: string;
     Type?: number;
     Use?: number;
+    Detail?: string;
 }

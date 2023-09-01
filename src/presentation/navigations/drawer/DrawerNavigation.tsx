@@ -25,6 +25,8 @@ type SendOTPProps = {
 
 type RuleProps = {};
 
+type ReportErrorProps ={}
+
 export type HomeDrawerParamList = {
     Home: HomeProps | undefined,
     PureWorld: PureWorldProps | undefined,
@@ -36,6 +38,7 @@ export type HomeDrawerParamList = {
     SendOTP: SendOTPProps | undefined;
     Register: RegisterProps | undefined;
     Rules: RuleProps | undefined;
+    ReportError : ReportErrorProps | undefined;
 };
 
 export type HomeDrawerNavigation = DrawerNavigationProp<HomeDrawerParamList>;
